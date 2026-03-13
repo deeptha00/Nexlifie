@@ -102,6 +102,7 @@ const TiltCard = ({ children, className = "" }) => {
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
@@ -119,22 +120,23 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${isScrolled ? 'py-4 bg-black/80 backdrop-blur-3xl border-b border-white/10' : 'py-8 bg-gradient-to-b from-black/60 to-transparent'}`}>
-      <div className="container mx-auto px-10 flex justify-between items-center">
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${isScrolled ? 'py-4 bg-black/80 backdrop-blur-3xl border-b border-white/10' : 'py-6 md:py-8 bg-gradient-to-b from-black/60 to-transparent'}`}>
+      <div className="container mx-auto px-6 md:px-10 flex justify-between items-center">
         <motion.a
           href="#"
-          className="flex items-center gap-5 group"
+          className="flex items-center gap-3 md:gap-5 group"
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
         >
           <div className="relative">
             <div className="absolute -inset-2 bg-green-500 blur-xl opacity-0 group-hover:opacity-40 transition-opacity" />
-            <img src={logo} alt="Nexlifie Logo" className="h-10 w-auto relative z-10 brightness-110" />
+            <img src={logo} alt="Nexlifie Logo" className="h-8 md:h-10 w-auto relative z-10 brightness-110" />
           </div>
-          <span className="text-2xl font-black tracking-[0.1em] text-white font-heading uppercase">NEXLIFIE</span>
+          <span className="text-xl md:text-2xl font-black tracking-[0.1em] text-white font-heading uppercase">NEXLIFIE</span>
         </motion.a>
 
-        <div className="hidden lg:flex items-center gap-14">
+        {/* Desktop Links */}
+        <div className="hidden lg:flex items-center gap-10 xl:gap-14">
           {navLinks.map((link, i) => (
             <motion.a
               key={link.name}
@@ -155,7 +157,43 @@ const Navbar = () => {
             Launch System
           </motion.button>
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          className="lg:hidden text-white p-2 z-[110]"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
+        </button>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[105] flex flex-col justify-center items-center gap-10 p-10 lg:hidden"
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-4xl font-black uppercase tracking-widest text-white hover:text-green-400 transition-all"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.name}
+              </a>
+            ))}
+            <button className="mt-10 px-12 py-5 bg-green-500 text-black font-black uppercase tracking-widest rounded-2xl w-full max-w-xs">
+              Launch System
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div className="absolute bottom-0 left-0 right-0 h-[3px] bg-green-500 shadow-[0_0_15px_#00ff88] origin-left z-20" style={{ scaleX }} />
     </nav>
   );
@@ -184,37 +222,37 @@ const Hero = () => {
       <div className="absolute top-[20%] left-[-10%] w-[120%] h-[1px] bg-gradient-to-r from-transparent via-green-500/40 to-transparent rotate-[15deg] blur-sm z-10" />
       <div className="absolute bottom-[20%] right-[-10%] w-[120%] h-[1px] bg-gradient-to-r from-transparent via-green-500/40 to-transparent rotate-[-15deg] blur-sm z-10" />
 
-      <div className="container mx-auto px-10 relative z-20 text-center">
+      <div className="container mx-auto px-6 md:px-10 relative z-20 text-center">
         <motion.div
           style={{ y: y1, opacity }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1 className="text-8xl md:text-[220px] font-black leading-none tracking-tighter mb-6 text-white font-heading relative inline-block">
+          <h1 className="text-6xl sm:text-8xl md:text-[180px] lg:text-[220px] font-black leading-[0.8] tracking-tighter mb-8 text-white font-heading relative inline-block">
             Nexlifie
-            <div className="absolute -inset-20 bg-green-500/15 blur-[140px] -z-10 rounded-full animate-pulse" />
+            <div className="absolute -inset-10 md:-inset-20 bg-green-500/15 blur-[60px] md:blur-[140px] -z-10 rounded-full animate-pulse" />
           </h1>
 
-          <p className="text-sm md:text-2xl font-mono text-green-400 tracking-[0.8em] uppercase flex justify-center items-center gap-6 mb-16 neon-glow-text">
-            Innovate <Sparkles size={20} /> Build <Activity size={20} /> Grow
+          <p className="text-xs sm:text-sm md:text-2xl font-mono text-green-400 tracking-[0.4em] sm:tracking-[0.8em] uppercase flex justify-center items-center gap-4 sm:gap-6 mb-12 md:mb-16 neon-glow-text">
+            Innovate <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" /> Build <Activity className="w-4 h-4 sm:w-5 sm:h-5" /> Grow
           </p>
 
-          <p className="max-w-4xl mx-auto text-xl md:text-2xl text-white/50 mb-20 font-light leading-relaxed tracking-wider">
+          <p className="max-w-4xl mx-auto text-lg sm:text-xl md:text-2xl text-white/50 mb-12 md:mb-20 font-light leading-relaxed tracking-wider px-4 md:px-0">
             We build modern websites, powerful applications, AI solutions, and automation systems for growing businesses.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-10 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-6 md:gap-10 justify-center items-center px-6 md:px-0">
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(0, 255, 136, 0.6)" }}
-              className="px-16 py-7 bg-green-500 text-black font-black uppercase tracking-[0.4em] text-[13px] rounded-3xl relative group overflow-hidden"
+              className="w-full sm:w-auto px-10 md:px-16 py-5 md:py-7 bg-green-500 text-black font-black uppercase tracking-[0.4em] text-[11px] md:text-[13px] rounded-2xl md:rounded-3xl relative group overflow-hidden"
             >
               <span className="relative z-10">Get Started</span>
               <div className="absolute inset-0 bg-white/40 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05, border: "1px solid #00ff88" }}
-              className="px-16 py-7 glass-cinematic border-white/10 text-white font-black uppercase tracking-[0.4em] text-[13px] rounded-3xl flex items-center gap-5 group"
+              className="w-full sm:w-auto px-10 md:px-16 py-5 md:py-7 glass-cinematic border-white/10 text-white font-black uppercase tracking-[0.4em] text-[11px] md:text-[13px] rounded-2xl md:rounded-3xl flex items-center justify-center gap-5 group"
               onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}
             >
               View Services <ChevronRight size={22} className="group-hover:translate-x-2 transition-transform" />
@@ -254,13 +292,13 @@ const Services = () => {
 
   return (
     <section id="services" className="py-48 relative overflow-hidden">
-      <div className="container mx-auto px-10">
+      <div className="container mx-auto px-6 md:px-10">
         <motion.div
-          className="mb-32 text-center"
+          className="mb-16 md:mb-32 text-center"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
         >
-          <h2 className="text-7xl md:text-[120px] font-black tracking-tighter leading-none uppercase">CORE <br /><span className="text-white/10">SERVICES</span></h2>
+          <h2 className="text-5xl sm:text-7xl md:text-[120px] font-black tracking-tighter leading-none uppercase">CORE <br /><span className="text-white/10">SERVICES</span></h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
@@ -292,9 +330,9 @@ const Services = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-48 relative overflow-hidden">
-      <div className="container mx-auto px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-40 items-center">
+    <section id="about" className="py-24 md:py-48 relative overflow-hidden">
+      <div className="container mx-auto px-6 md:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-40 items-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
             whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
@@ -302,12 +340,12 @@ const About = () => {
             transition={{ duration: 1.2 }}
             className="relative group perspective-[2000px]"
           >
-            <div className="absolute -inset-20 bg-green-500/10 blur-[180px] rounded-full group-hover:bg-green-500/20 transition-all duration-[2s]" />
-            <div className="relative rounded-[4rem] overflow-hidden border border-white/10 glass-cinematic p-3 shadow-3xl">
+            <div className="absolute -inset-10 md:-inset-20 bg-green-500/10 blur-[80px] md:blur-[180px] rounded-full group-hover:bg-green-500/20 transition-all duration-[2s]" />
+            <div className="relative rounded-[2.5rem] md:rounded-[4rem] overflow-hidden border border-white/10 glass-cinematic p-2 md:p-3 shadow-3xl">
               <img
                 src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1400"
                 alt="Nexlifie Vision"
-                className="rounded-[4rem] grayscale group-hover:grayscale-0 transition-all duration-[1.5s] brightness-75 group-hover:brightness-100 group-hover:scale-105"
+                className="rounded-[2.5rem] md:rounded-[4rem] grayscale group-hover:grayscale-0 transition-all duration-[1.5s] brightness-75 group-hover:brightness-100 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-transparent opacity-60" />
             </div>
@@ -317,24 +355,25 @@ const About = () => {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            className="text-center lg:text-left"
           >
-            <h2 className="text-6xl md:text-[110px] font-black mb-14 tracking-tighter leading-[0.9] uppercase underline underline-offset-[20px] decoration-green-500/20">WE BUILD <br />SCALABLE <br /><span className="text-white/10">FUTURES.</span></h2>
-            <div className="space-y-10 mb-16">
-              <p className="text-2xl text-white/40 font-light leading-relaxed tracking-wide max-w-2xl">
+            <h2 className="text-4xl sm:text-6xl md:text-[110px] font-black mb-8 md:mb-14 tracking-tighter leading-[0.9] uppercase underline underline-offset-[12px] md:underline-offset-[20px] decoration-green-500/20">WE BUILD <br />SCALABLE <br /><span className="text-white/10">FUTURES.</span></h2>
+            <div className="space-y-6 md:space-y-10 mb-10 md:mb-16">
+              <p className="text-xl md:text-2xl text-white/40 font-light leading-relaxed tracking-wide max-w-2xl mx-auto lg:mx-0">
                 Nexlifie is a modern software and digital solutions company focused on building innovative, scalable, and intelligent technology products for businesses around the world.
               </p>
-              <p className="text-2xl text-white/40 font-light leading-relaxed tracking-wide max-w-2xl">
+              <p className="text-xl md:text-2xl text-white/40 font-light leading-relaxed tracking-wide max-w-2xl mx-auto lg:mx-0">
                 We specialize in creating high-quality websites, powerful web applications, mobile applications, AI-driven solutions, automation systems, and result-oriented digital marketing strategies.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-20 border-l-2 border-green-500/30 pl-16 py-4">
+            <div className="grid grid-cols-2 gap-10 md:gap-20 border-l-0 lg:border-l-2 border-green-500/30 pl-0 lg:pl-16 py-4 justify-center">
               <div>
-                <h4 className="text-7xl font-black text-green-500 neon-glow-text">150+</h4>
-                <p className="text-xs font-mono uppercase tracking-widest text-white/20 mt-4">Synced Missions</p>
+                <h4 className="text-5xl md:text-7xl font-black text-green-500 neon-glow-text">150+</h4>
+                <p className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-white/20 mt-2 md:mt-4">Synced Missions</p>
               </div>
               <div>
-                <h4 className="text-7xl font-black text-white/20 leading-none">Global</h4>
-                <p className="text-xs font-mono uppercase tracking-widest text-white/20 mt-4">Reach</p>
+                <h4 className="text-5xl md:text-7xl font-black text-white/20 leading-none">Global</h4>
+                <p className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-white/20 mt-2 md:mt-4">Reach</p>
               </div>
             </div>
           </motion.div>
@@ -362,36 +401,36 @@ const Testimonials = () => {
     <section id="testimonials" className="py-48 relative bg-black/80">
       <div className="container mx-auto px-10">
         <motion.div
-          className="text-center mb-40"
+          className="text-center mb-24 md:mb-40"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
         >
-          <span className="text-green-500 font-black tracking-[1em] text-[12px] uppercase mb-8 block">Global Feedback Matrix</span>
-          <h2 className="text-6xl md:text-[120px] font-black tracking-tighter uppercase leading-none">CLIENT <span className="text-white/10">SUCCESS.</span></h2>
+          <span className="text-green-500 font-black tracking-[0.6em] md:tracking-[1em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block">Global Feedback Matrix</span>
+          <h2 className="text-4xl sm:text-6xl md:text-[120px] font-black tracking-tighter uppercase leading-none">CLIENT <span className="text-white/10">SUCCESS.</span></h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 max-w-6xl mx-auto px-4 md:px-0">
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, scale: 0.9, y: 30 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              whileHover={{ y: -20 }}
+              whileHover={{ y: -10 }}
               transition={{ delay: i * 0.2 }}
-              className="glass-cinematic p-14 rounded-[3.5rem] border border-white/5 shadow-2xl group transition-all duration-500 overflow-hidden relative"
+              className="glass-cinematic p-8 md:p-14 rounded-[2rem] md:rounded-[3.5rem] border border-white/5 shadow-2xl group transition-all duration-500 overflow-hidden relative"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/5 blur-[60px] rounded-full group-hover:bg-green-500/10 transition-all" />
-              <div className="flex gap-2 text-green-500 mb-10 group-hover:neon-glow-text">
-                {[1, 2, 3, 4, 5].map(star => <Zap size={22} key={star} fill="currentColor" />)}
+              <div className="flex gap-2 text-green-500 mb-6 md:mb-10 group-hover:neon-glow-text">
+                {[1, 2, 3, 4, 5].map(star => <Zap size={18} key={star} fill="currentColor" />)}
               </div>
-              <p className="text-3xl text-white/60 italic mb-14 font-light leading-relaxed tracking-wide">"{t.text}"</p>
-              <div className="flex items-center gap-8 border-t border-white/5 pt-12">
-                <div className="w-20 h-20 bg-green-500/10 rounded-2xl border border-green-500/30 flex items-center justify-center group-hover:neon-border-glow transition-all">
-                  {t.icon}
+              <p className="text-xl md:text-3xl text-white/60 italic mb-10 md:mb-14 font-light leading-relaxed tracking-wide">"{t.text}"</p>
+              <div className="flex items-center gap-6 md:gap-8 border-t border-white/5 pt-8 md:pt-12">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-green-500/10 rounded-2xl border border-green-500/30 flex items-center justify-center group-hover:neon-border-glow transition-all">
+                  {React.cloneElement(t.icon, { size: 24 })}
                 </div>
                 <div>
-                  <h5 className="text-2xl font-black text-white hover:text-green-500 transition-colors uppercase tracking-tight">{t.client}</h5>
-                  <p className="text-[12px] text-green-500 font-mono uppercase tracking-[0.4em] mt-2 opacity-60">Verified Partner</p>
+                  <h5 className="text-xl md:text-2xl font-black text-white hover:text-green-500 transition-colors uppercase tracking-tight">{t.client}</h5>
+                  <p className="text-[10px] text-green-500 font-mono uppercase tracking-[0.3em] md:tracking-[0.4em] mt-1 md:mt-2 opacity-60">Verified Partner</p>
                 </div>
               </div>
             </motion.div>
@@ -404,28 +443,28 @@ const Testimonials = () => {
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-48 relative overflow-hidden">
-      <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-green-500/5 blur-[180px] rounded-full pointer-events-none" />
+    <section id="contact" className="py-24 md:py-48 relative overflow-hidden">
+      <div className="absolute top-[20%] right-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-green-500/5 blur-[100px] md:blur-[180px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-10 relative z-10">
-        <div className="glass-cinematic p-16 md:p-32 rounded-[5rem] border-white/5 grid grid-cols-1 lg:grid-cols-2 gap-32">
-          <div className="relative">
-            <h2 className="text-6xl md:text-[130px] font-black mb-16 tracking-tighter leading-none uppercase">START <br /><span className="text-white/10">THE MISSION.</span></h2>
+      <div className="container mx-auto px-6 md:px-10 relative z-10">
+        <div className="glass-cinematic p-8 md:p-16 lg:p-32 rounded-[2.5rem] md:rounded-[5rem] border-white/5 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32">
+          <div className="relative text-center lg:text-left">
+            <h2 className="text-4xl sm:text-6xl md:text-[100px] lg:text-[130px] font-black mb-10 md:mb-16 tracking-tighter leading-none uppercase">START <br /><span className="text-white/10">THE MISSION.</span></h2>
 
-            <div className="space-y-16">
-              <div className="flex flex-col gap-6 group cursor-pointer">
-                <span className="text-[11px] font-black uppercase text-white/20 tracking-[0.5em] font-mono">SECURE EMAIL</span>
-                <p className="text-4xl font-black font-heading text-white group-hover:text-green-400 transition-all duration-500 flex items-center gap-6">nexlifie@gmail.com <ArrowRight size={28} className="opacity-0 group-hover:opacity-100 transition-all" /></p>
+            <div className="space-y-10 md:space-y-16">
+              <div className="flex flex-col gap-4 md:gap-6 group cursor-pointer">
+                <span className="text-[10px] md:text-[11px] font-black uppercase text-white/20 tracking-[0.5em] font-mono">SECURE EMAIL</span>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-white group-hover:text-green-400 transition-all duration-500 flex items-center justify-center lg:justify-start gap-4 md:gap-6">nexlifie@gmail.com <ArrowRight className="opacity-0 group-hover:opacity-100 transition-all w-6 h-6 md:w-8 md:h-8" /></p>
               </div>
-              <div className="flex flex-col gap-6">
-                <span className="text-[11px] font-black uppercase text-white/20 tracking-[0.5em] font-mono">BROCHURE DOMAIN</span>
-                <p className="text-4xl font-black font-heading text-white tracking-tight">nexlifie.com</p>
+              <div className="flex flex-col gap-4 md:gap-6">
+                <span className="text-[10px] md:text-[11px] font-black uppercase text-white/20 tracking-[0.5em] font-mono">BROCHURE DOMAIN</span>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-white tracking-tight">nexlifie.com</p>
               </div>
             </div>
-            <div className="mt-20 flex gap-8">
+            <div className="mt-12 md:mt-20 flex gap-6 md:gap-8 justify-center lg:justify-start">
               {[Twitter, Github, Linkedin].map((Icon, i) => (
-                <div key={i} className="w-14 h-14 glass-cinematic rounded-2xl flex items-center justify-center hover:bg-green-500 hover:text-black transition-all cursor-pointer">
-                  <Icon size={24} />
+                <div key={i} className="w-12 h-12 md:w-14 md:h-14 glass-cinematic rounded-xl md:rounded-2xl flex items-center justify-center hover:bg-green-500 hover:text-black transition-all cursor-pointer">
+                  <Icon size={20} className="md:size-24" />
                 </div>
               ))}
             </div>
@@ -434,28 +473,28 @@ const Contact = () => {
           <motion.form
             action="https://formspree.io/f/mkgogayw"
             method="POST"
-            className="space-y-12"
+            className="space-y-8 md:space-y-12"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="space-y-5">
-                <label className="text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">ENTITY_ID</label>
-                <input name="name" type="text" placeholder="Authorized Name" required className="w-full bg-white/5 border-b border-white/10 p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-lg" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
+              <div className="space-y-3 md:space-y-5">
+                <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">ENTITY_ID</label>
+                <input name="name" type="text" placeholder="Authorized Name" required className="w-full bg-white/5 border-b border-white/10 p-4 md:p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-base md:text-lg" />
               </div>
-              <div className="space-y-5">
-                <label className="text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">NETWORK_ADR</label>
-                <input name="email" type="email" placeholder="Work Identity" required className="w-full bg-white/5 border-b border-white/10 p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-lg" />
+              <div className="space-y-3 md:space-y-5">
+                <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">NETWORK_ADR</label>
+                <input name="email" type="email" placeholder="Work Identity" required className="w-full bg-white/5 border-b border-white/10 p-4 md:p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-base md:text-lg" />
               </div>
             </div>
-            <div className="space-y-5">
-              <label className="text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">TRANSMISSION_DETAILS</label>
-              <textarea name="message" placeholder="Outline your digital vision..." rows="5" required className="w-full bg-white/5 border-b border-white/10 p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-lg"></textarea>
+            <div className="space-y-3 md:space-y-5">
+              <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">TRANSMISSION_DETAILS</label>
+              <textarea name="message" placeholder="Outline your digital vision..." rows="5" required className="w-full bg-white/5 border-b border-white/10 p-4 md:p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-base md:text-lg"></textarea>
             </div>
             <motion.button
               type="submit"
               whileHover={{ scale: 1.02, boxShadow: "0 20px 80px rgba(0, 255, 136, 0.4)" }}
-              className="w-full py-10 bg-green-500 text-black font-black uppercase tracking-[0.6em] text-[14px] rounded-[2.5rem] transition-all flex items-center justify-center gap-8 group"
+              className="w-full py-6 md:py-10 bg-green-500 text-black font-black uppercase tracking-[0.4em] sm:tracking-[0.6em] text-[12px] md:text-[14px] rounded-[1.5rem] md:rounded-[2.5rem] transition-all flex items-center justify-center gap-4 md:gap-8 group"
             >
               ESTABLISH CONNECTION <Rocket size={26} className="group-hover:translate-x-4 transition-transform duration-500" />
             </motion.button>
@@ -527,16 +566,16 @@ function App() {
         {/* Technology Matrix Section */}
         <section className="py-48 relative overflow-hidden bg-black/40">
           <div className="container mx-auto px-10">
-            <div className="text-center mb-32">
-              <h2 className="text-5xl md:text-9xl font-black mb-8 tracking-tighter uppercase">AI <span className="text-green-500 neon-glow-text">DASHBOARD</span></h2>
-              <p className="text-[14px] font-black uppercase tracking-[1em] text-white/30">Technology Integration Interface</p>
+            <div className="text-center mb-24 md:mb-32">
+              <h2 className="text-4xl sm:text-6xl md:text-9xl font-black mb-6 md:mb-8 tracking-tighter uppercase">AI <span className="text-green-500 neon-glow-text">DASHBOARD</span></h2>
+              <p className="text-[10px] md:text-[14px] font-black uppercase tracking-[0.6em] md:tracking-[1em] text-white/30">Technology Integration Interface</p>
             </div>
-            <div className="flex flex-wrap justify-center gap-10 max-w-7xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-6 md:gap-10 max-w-7xl mx-auto px-4 md:px-0">
               {["React", "Next.js", "Node.js", "Python", "OpenAI", "TensorFlow", "AWS", "Docker", "MongoDB", "TypeScript", "Kotlin", "Swift", "Flutter"].map((tech, i) => (
                 <motion.div
                   key={tech}
                   whileHover={{ scale: 1.1, backgroundColor: 'rgba(0, 255, 136, 0.1)', borderColor: '#00ff88' }}
-                  className="px-12 py-5 glass-cinematic border border-white/10 rounded-2xl font-mono text-sm tracking-widest uppercase transition-all duration-500 cursor-none"
+                  className="px-8 md:px-12 py-3 md:py-5 glass-cinematic border border-white/10 rounded-xl md:rounded-2xl font-mono text-[10px] md:text-sm tracking-widest uppercase transition-all duration-500 cursor-default"
                 >
                   {tech}
                 </motion.div>
@@ -550,12 +589,12 @@ function App() {
         {/* Global Features Section (Level 7) */}
         <section className="py-48 relative">
           <div className="container mx-auto px-10">
-            <div className="text-center mb-40">
-              <h2 className="text-6xl md:text-[140px] font-black tracking-tighter mb-8 text-white uppercase"><span className="text-white/10 text-glow">WHY</span> NEXLIFIE?</h2>
-              <div className="w-60 h-[3px] bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto" />
+            <div className="text-center mb-24 md:mb-40">
+              <h2 className="text-4xl sm:text-6xl md:text-[140px] font-black tracking-tighter mb-6 md:mb-8 text-white uppercase"><span className="text-white/10 text-glow">WHY</span> NEXLIFIE?</h2>
+              <div className="w-40 md:w-60 h-[2px] md:h-[3px] bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 px-6 md:px-0">
               {[
                 { title: "Elite Design", icon: <Boxes />, code: "USER_EXP" },
                 { title: "AI Integrated", icon: <Activity />, code: "AI_LOGIC" },
@@ -566,15 +605,15 @@ function App() {
                   key={i}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
-                  whileHover={{ y: -25, scale: 1.05 }}
-                  className="p-16 glass-cinematic border-white/5 text-center group transition-all duration-500 rounded-[3.5rem] shadow-2xl overflow-hidden relative"
+                  whileHover={{ y: -15, scale: 1.05 }}
+                  className="p-10 md:p-16 glass-cinematic border-white/5 text-center group transition-all duration-500 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl overflow-hidden relative"
                 >
                   <div className="absolute inset-x-0 bottom-0 h-1 bg-green-500/20 group-hover:bg-green-500 transition-colors" />
-                  <div className="text-green-500 mb-10 flex justify-center group-hover:scale-125 transition-transform duration-700">
-                    {React.cloneElement(feature.icon, { size: 40 })}
+                  <div className="text-green-500 mb-8 md:mb-10 flex justify-center group-hover:scale-125 transition-transform duration-700">
+                    {React.cloneElement(feature.icon, { size: 32 })}
                   </div>
-                  <p className="text-[12px] font-mono text-white/20 mb-6 tracking-widest">{feature.code}</p>
-                  <h4 className="text-3xl font-black font-heading uppercase tracking-tighter mb-6 group-hover:text-green-400 transition-colors">{feature.title}</h4>
+                  <p className="text-[10px] font-mono text-white/20 mb-4 md:mb-6 tracking-widest">{feature.code}</p>
+                  <h4 className="text-2xl md:text-3xl font-black font-heading uppercase tracking-tighter mb-4 md:mb-6 group-hover:text-green-400 transition-colors">{feature.title}</h4>
                 </motion.div>
               ))}
             </div>
