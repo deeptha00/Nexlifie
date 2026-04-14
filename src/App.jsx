@@ -12,52 +12,19 @@ import {
 import logo from './assets/logo.png';
 import heroVideo from './assets/video.mp4';
 
+// --- Client Logos ---
+import client1 from './assets/Logos/3x_logo.png';
+import client2 from './assets/Logos/Aurelian Logo.png';
+import client3 from './assets/Logos/bibo_logo.jpg';
+import client4 from './assets/Logos/bumblebee-logo.jpg';
+import client5 from './assets/Logos/eyeluxe_logo.png';
+import client6 from './assets/Logos/keralasoul_logo.png';
+import client7 from './assets/Logos/trainifie_logo.png';
+
 // --- Global UI Components ---
 
 const NoiseOverlay = () => <div className="noise-overlay" />;
 
-const CustomCursor = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isPointer, setIsPointer] = useState(false);
-
-  useEffect(() => {
-    const onMouseMove = (e) => setPosition({ x: e.clientX, y: e.clientY });
-    const onMouseOver = (e) => {
-      const target = e.target;
-      setIsPointer(window.getComputedStyle(target).cursor === 'pointer');
-    };
-
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseover', onMouseOver);
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseover', onMouseOver);
-    };
-  }, []);
-
-  return (
-    <motion.div
-      className="hidden lg:block fixed pointer-events-none z-[9999]"
-      animate={{
-        left: position.x,
-        top: position.y,
-        scale: isPointer ? 1.5 : 1,
-        backgroundColor: isPointer ? 'rgba(0, 255, 136, 0.2)' : 'rgba(0, 255, 136, 0)'
-      }}
-      transition={{ type: 'spring', stiffness: 250, damping: 20, mass: 0.5 }}
-      style={{ transform: 'translate(-50%, -50%)' }}
-    >
-      <div className="w-10 h-10 border border-green-500/30 rounded-full flex items-center justify-center relative">
-        <div className="w-1 h-1 bg-green-500 rounded-full shadow-[0_0_10px_#00ff88]" />
-        <motion.div
-          className="absolute inset-0 border border-green-500/10 rounded-full"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.1, 0.5] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        />
-      </div>
-    </motion.div>
-  );
-};
 
 const TiltCard = ({ children, className = "" }) => {
   const x = useMotionValue(0);
@@ -115,7 +82,7 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Services', href: '#services' },
     { name: 'About', href: '#about' },
-    { name: 'Clients', href: '#testimonials' },
+    { name: 'Clients', href: '#clients' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -441,6 +408,59 @@ const Testimonials = () => {
   );
 };
 
+const Clients = () => {
+  const clients = [
+    { name: "3X", logo: client1 },
+    { name: "Aurelian", logo: client2, scale: 1.8 },
+    { name: "Bibo", logo: client3 },
+    { name: "Bumblebee", logo: client4 },
+    { name: "Eyeluxe", logo: client5 },
+    { name: "Kerala Soul", logo: client6 },
+    { name: "Trainifie", logo: client7 }
+  ];
+
+  return (
+    <section id="clients" className="py-24 md:py-48 relative overflow-hidden">
+      <div className="container mx-auto px-10">
+        <motion.div
+          className="text-center mb-24 md:mb-32"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <span className="text-green-500 font-black tracking-[0.6em] md:tracking-[1em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block">Network Partners</span>
+          <h2 className="text-4xl sm:text-6xl md:text-[120px] font-black tracking-tighter uppercase leading-none">TRUSTED <span className="text-white/10">BY.</span></h2>
+        </motion.div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 md:gap-12 items-center justify-items-center">
+          {clients.map((client, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.1, y: -5 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              className="relative group w-full aspect-square md:aspect-auto h-24 md:h-32 flex items-center justify-center p-6 glass-cinematic rounded-2xl md:rounded-3xl border-white/5 hover:border-green-500/30 transition-all duration-500"
+            >
+              <div className="absolute inset-0 bg-green-500/0 group-hover:bg-green-500/[0.03] transition-colors rounded-2xl md:rounded-3xl" />
+              <img
+                src={client.logo}
+                alt={client.name}
+                className="max-w-full max-h-full object-contain transition-all duration-700 p-2"
+                style={client.scale ? { transform: `scale(${client.scale})` } : {}}
+              />
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <span className="text-[10px] font-mono text-green-500 uppercase tracking-widest whitespace-nowrap">{client.name}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Contact = () => {
   return (
     <section id="contact" className="py-24 md:py-48 relative overflow-hidden">
@@ -520,7 +540,7 @@ const Footer = () => {
           <p className="text-[16px] font-mono font-black text-green-500/60 uppercase tracking-[1em]">Innovate | Build | Grow</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 max-w-4xl mx-auto mb-32 border-y border-white/5 py-16">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-20 max-w-4xl mx-auto mb-32 border-y border-white/5 py-16">
           <div className="flex flex-col items-center md:items-start gap-4">
             <span className="text-[11px] font-black uppercase tracking-[0.5em] text-white/20 font-mono">Direct Channel</span>
             <p className="text-xl font-bold hover:text-green-400 transition-colors">nexlifie@gmail.com</p>
@@ -529,18 +549,18 @@ const Footer = () => {
             <span className="text-[11px] font-black uppercase tracking-[0.5em] text-white/20 font-mono">Digital Domain</span>
             <p className="text-xl font-bold hover:text-green-400 transition-colors">nexlifie.com</p>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-12 opacity-30 px-10">
-          <div className="flex flex-col gap-4 text-left">
+          {/* <div className="flex flex-col gap-4 text-left">
             <p className="text-[11px] font-mono tracking-widest uppercase">Kernel Protocol // Node Synchronized</p>
             <p className="text-[11px] font-black uppercase tracking-widest">© 2026 Nexlifie. Elite Engineering Group.</p>
-          </div>
-          <div className="flex gap-16 text-[11px] font-black uppercase tracking-widest">
+          </div> */}
+          {/* <div className="flex gap-16 text-[11px] font-black uppercase tracking-widest">
             <a href="#" className="hover:text-green-400 transition-colors">Privacy</a>
             <a href="#" className="hover:text-white transition-colors">Terms</a>
             <a href="#" className="hover:text-white transition-colors">Security</a>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
@@ -549,9 +569,8 @@ const Footer = () => {
 
 function App() {
   return (
-    <div className="bg-[#020202] text-white selection:bg-green-500/40 selection:text-green-400 min-h-screen relative overflow-hidden cursor-none">
+    <div className="bg-[#020202] text-white selection:bg-green-500/40 selection:text-green-400 min-h-screen relative overflow-hidden">
       <NoiseOverlay />
-      <CustomCursor />
 
       {/* Cinematic Grid Overlay */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20 digital-grid-system mask-fade-in" />
@@ -584,6 +603,7 @@ function App() {
           </div>
         </section>
 
+        <Clients />
         <Testimonials />
 
         {/* Global Features Section (Level 7) */}
