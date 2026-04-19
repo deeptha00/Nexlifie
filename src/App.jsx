@@ -54,13 +54,13 @@ const TiltCard = ({ children, className = "" }) => {
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       style={{ rotateX: mouseY, rotateY: mouseX, transformStyle: "preserve-3d" }}
-      className={`glass-cinematic relative group p-8 rounded-[2rem] border-white/5 neo-card ${className}`}
+      className={`glass-cinematic relative group p-8 rounded-[2.5rem] border border-white/5 hover:border-green-500/30 transition-all duration-500 shadow-2xl ${className}`}
     >
-      <div style={{ transform: "translateZ(30px)" }} className="relative z-10 h-full flex flex-col">
+      <div style={{ transform: "translateZ(40px)" }} className="relative z-10 h-full flex flex-col">
         {children}
       </div>
-      <div className="absolute inset-0 light-sweep-effect opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-[2rem]" />
-      <div className="absolute inset-0 bg-green-500/0 group-hover:bg-green-500/[0.04] transition-all duration-500 rounded-[2rem]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 to-green-500/0 group-hover:from-green-500/[0.05] group-hover:to-transparent transition-all duration-700 rounded-[2.5rem]" />
+      <div className="absolute inset-0 light-sweep-effect opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-[2.5rem]" />
     </motion.div>
   );
 };
@@ -87,28 +87,39 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${isScrolled ? 'py-4 bg-black/80 backdrop-blur-3xl border-b border-white/10' : 'py-6 md:py-8 bg-gradient-to-b from-black/60 to-transparent'}`}>
-      <div className="container mx-auto px-6 md:px-10 flex justify-between items-center">
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${isScrolled ? 'py-3 md:py-4 bg-black/80 backdrop-blur-3xl border-b border-white/10' : 'py-5 md:py-8 bg-gradient-to-b from-black/60 to-transparent'}`}>
+      <div className="container mx-auto px-4 sm:px-6 md:px-10 flex justify-between items-center">
         <motion.a
           href="#"
           className="flex items-center gap-3 md:gap-5 group"
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          <div className="relative">
-            <div className="absolute -inset-2 bg-green-500 blur-xl opacity-0 group-hover:opacity-40 transition-opacity" />
-            <img src={logo} alt="Nexlifie Logo" className="h-8 md:h-10 w-auto relative z-10 brightness-110" />
+          <div className="relative group cursor-pointer">
+            <div className="absolute -inset-4 bg-green-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700 animate-pulse" />
+            <motion.div
+              whileHover={{ scale: 1.05, rotateY: 10, rotateX: -5 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative z-10 glass-cinematic p-2 md:p-2.5 rounded-xl md:rounded-2xl border border-white/10 group-hover:border-green-500/40 transition-all duration-500 overflow-hidden shadow-2xl"
+            >
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-green-500/20 to-transparent -translate-x-[100%]"
+                animate={{ x: ['100%', '-100%'] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              />
+              <img src={logo} alt="Nexlifie Logo" className="h-8 sm:h-10 md:h-14 w-auto relative z-10 brightness-110 drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]" />
+              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-green-500/50 rounded-tl-md group-hover:w-4 group-hover:h-4 transition-all duration-500" />
+              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-green-500/50 rounded-br-md group-hover:w-4 group-hover:h-4 transition-all duration-500" />
+            </motion.div>
           </div>
-          <span className="text-xl md:text-2xl font-black tracking-[0.1em] text-white font-heading uppercase">NEXLIFIE</span>
         </motion.a>
 
-        {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-10 xl:gap-14">
+        <div className="hidden lg:flex items-center gap-8 xl:gap-14">
           {navLinks.map((link, i) => (
             <motion.a
               key={link.name}
               href={link.href}
-              className="text-[12px] font-black uppercase tracking-[0.22em] text-white hover:text-green-400 transition-all flex items-center gap-3 relative group/link"
+              className="text-[11px] xl:text-[12px] font-black uppercase tracking-[0.22em] text-white hover:text-green-400 transition-all"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
@@ -116,21 +127,17 @@ const Navbar = () => {
               {link.name}
             </motion.a>
           ))}
-          <motion.div className="h-8 w-[1px] bg-white/15 mx-4" />
-          <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(0, 255, 136, 0.4)" }}
-            className="px-8 py-3 glass-cinematic border-green-500/40 text-green-400 text-[12px] font-black uppercase tracking-[0.2em] rounded-full hover:bg-green-500 hover:text-black transition-all"
+          <motion.div className="h-8 w-[1px] bg-white/15 mx-2 xl:mx-4" />
+          <motion.button 
+            onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
+            className="px-6 xl:px-8 py-3 glass-cinematic border-green-500/40 text-green-400 text-[11px] xl:text-[12px] font-black uppercase tracking-[0.2em] rounded-full hover:bg-green-500 hover:text-black transition-all"
           >
             Launch System
           </motion.button>
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          className="lg:hidden text-white p-2 z-[110]"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
+        <button className="lg:hidden text-white p-2 z-[110] hover:text-green-400" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
@@ -154,7 +161,13 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <button className="mt-10 px-12 py-5 bg-green-500 text-black font-black uppercase tracking-widest rounded-2xl w-full max-w-xs">
+            <button 
+              className="mt-10 px-12 py-5 bg-green-500 text-black font-black uppercase tracking-widest rounded-2xl w-full max-w-xs shadow-[0_0_40px_rgba(0,255,136,0.3)]"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Launch System
             </button>
           </motion.div>
@@ -172,7 +185,7 @@ const Hero = () => {
   const opacity = useTransform(scrollY, [0, 500], [1, 0]);
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-16">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
@@ -189,40 +202,41 @@ const Hero = () => {
       <div className="absolute top-[20%] left-[-10%] w-[120%] h-[1px] bg-gradient-to-r from-transparent via-green-500/40 to-transparent rotate-[15deg] blur-sm z-10" />
       <div className="absolute bottom-[20%] right-[-10%] w-[120%] h-[1px] bg-gradient-to-r from-transparent via-green-500/40 to-transparent rotate-[-15deg] blur-sm z-10" />
 
-      <div className="container mx-auto px-6 md:px-10 relative z-20 text-center">
+      <div className="container mx-auto px-4 sm:px-6 md:px-10 relative z-20 text-center">
         <motion.div
           style={{ y: y1, opacity }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1 className="text-6xl sm:text-8xl md:text-[180px] lg:text-[220px] font-black leading-[0.8] tracking-tighter mb-8 text-white font-heading relative inline-block">
+          <h1 className="text-5xl sm:text-7xl md:text-9xl lg:text-[180px] xl:text-[220px] font-black leading-[0.8] tracking-tighter mb-8 md:mb-12 text-white font-heading relative inline-block">
             Nexlifie
             <div className="absolute -inset-10 md:-inset-20 bg-green-500/15 blur-[60px] md:blur-[140px] -z-10 rounded-full animate-pulse" />
           </h1>
 
-          <p className="text-xs sm:text-sm md:text-2xl font-mono text-green-400 tracking-[0.4em] sm:tracking-[0.8em] uppercase flex justify-center items-center gap-4 sm:gap-6 mb-12 md:mb-16 neon-glow-text">
-            Innovate <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" /> Build <Activity className="w-4 h-4 sm:w-5 sm:h-5" /> Grow
+          <p className="text-[10px] sm:text-xs md:text-2xl font-mono text-green-400 tracking-[0.3em] sm:tracking-[0.8em] uppercase flex justify-center items-center gap-3 sm:gap-6 mb-10 md:mb-16 neon-glow-text">
+            Innovate <Sparkles className="w-3 h-3 sm:w-5 sm:h-5" /> Build <Activity className="w-3 h-3 sm:w-5 sm:h-5" /> Grow
           </p>
 
-          <p className="max-w-4xl mx-auto text-lg sm:text-xl md:text-2xl text-white/50 mb-12 md:mb-20 font-light leading-relaxed tracking-wider px-4 md:px-0">
+          <p className="max-w-4xl mx-auto text-base sm:text-lg md:text-2xl text-white/50 mb-10 md:mb-20 font-light leading-relaxed tracking-wider px-4">
             We build modern websites, powerful applications, AI solutions, and automation systems for growing businesses.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 md:gap-10 justify-center items-center px-6 md:px-0">
+          <div className="flex flex-col sm:flex-row gap-5 md:gap-10 justify-center items-center px-4 md:px-0">
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(0, 255, 136, 0.6)" }}
-              className="w-full sm:w-auto px-10 md:px-16 py-5 md:py-7 bg-green-500 text-black font-black uppercase tracking-[0.4em] text-[11px] md:text-[13px] rounded-2xl md:rounded-3xl relative group overflow-hidden"
+              onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
+              className="w-full sm:w-auto px-10 md:px-16 py-5 md:py-7 bg-green-500 text-black font-black uppercase tracking-[0.4em] text-[10px] md:text-[13px] rounded-xl md:rounded-3xl relative group overflow-hidden"
             >
               <span className="relative z-10">Get Started</span>
               <div className="absolute inset-0 bg-white/40 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05, border: "1px solid #00ff88" }}
-              className="w-full sm:w-auto px-10 md:px-16 py-5 md:py-7 glass-cinematic border-white/10 text-white font-black uppercase tracking-[0.4em] text-[11px] md:text-[13px] rounded-2xl md:rounded-3xl flex items-center justify-center gap-5 group"
+              className="w-full sm:w-auto px-10 md:px-16 py-5 md:py-7 glass-cinematic border-white/10 text-white font-black uppercase tracking-[0.4em] text-[10px] md:text-[13px] rounded-xl md:rounded-3xl flex items-center justify-center gap-5 group"
               onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })}
             >
-              View Services <ChevronRight size={22} className="group-hover:translate-x-2 transition-transform" />
+              View Services <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
             </motion.button>
           </div>
         </motion.div>
@@ -258,14 +272,14 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-48 relative overflow-hidden">
-      <div className="container mx-auto px-6 md:px-10">
+    <section id="services" className="py-24 md:py-32 lg:py-48 relative overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 md:px-10">
         <motion.div
-          className="mb-16 md:mb-32 text-center"
+          className="mb-12 md:mb-24 lg:mb-32 text-center"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
         >
-          <h2 className="text-5xl sm:text-7xl md:text-[120px] font-black tracking-tighter leading-none uppercase">CORE <br /><span className="text-white/10">SERVICES</span></h2>
+          <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[120px] font-black tracking-tighter leading-none uppercase">CORE <br /><span className="text-white/10">SERVICES</span></h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
@@ -277,13 +291,14 @@ const Services = () => {
               viewport={{ once: true }}
               transition={{ delay: (i % 4) * 0.1 }}
             >
-              <TiltCard className="h-full">
-                <div className="text-green-400 mb-8 p-6 w-fit rounded-2xl bg-white/5 border border-white/5 group-hover:bg-green-500 group-hover:text-black transition-all group-hover:neon-border-glow shadow-2xl">
+              <TiltCard className="h-full bg-white/[0.02]">
+                <div className="text-green-400 mb-10 p-6 w-fit rounded-2xl bg-white/5 border border-white/5 group-hover:bg-green-500 group-hover:text-black transition-all duration-500 group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)]">
                   {React.cloneElement(service.icon, { size: 32 })}
                 </div>
-                <h3 className="text-2xl font-black mb-4 tracking-tight uppercase group-hover:text-green-400 transition-colors">{service.title}</h3>
-                <p className="text-white/30 text-xs leading-relaxed font-mono uppercase tracking-[0.1em] mb-10">{service.text}</p>
-                <div className="mt-auto border-t border-white/5 pt-8 flex justify-end items-center opacity-40 group-hover:opacity-100 transition-opacity">
+                <h3 className="text-2xl font-black mb-6 tracking-tight uppercase group-hover:text-green-400 transition-colors duration-500">{service.title}</h3>
+                <p className="text-white/40 text-[13px] leading-relaxed font-mono uppercase tracking-[0.1em] mb-12">{service.text}</p>
+                <div className="mt-auto border-t border-white/10 pt-8 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-all duration-500">
+                  <span className="text-[10px] font-black tracking-widest text-green-500">EXPLORE SCOPE</span>
                   <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
                 </div>
               </TiltCard>
@@ -297,50 +312,45 @@ const Services = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-24 md:py-48 relative overflow-hidden">
-      <div className="container mx-auto px-6 md:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-40 items-center">
+    <section id="about" className="py-24 md:py-32 lg:py-48 relative overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 md:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 lg:gap-40 items-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
-            whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2 }}
             className="relative group perspective-[2000px]"
           >
-            <div className="absolute -inset-10 md:-inset-20 bg-green-500/10 blur-[80px] md:blur-[180px] rounded-full group-hover:bg-green-500/20 transition-all duration-[2s]" />
-            <div className="relative rounded-[2.5rem] md:rounded-[4rem] overflow-hidden border border-white/10 glass-cinematic p-2 md:p-3 shadow-3xl">
+            <div className="absolute -inset-10 md:-inset-20 bg-green-500/10 blur-[60px] md:blur-[180px] rounded-full" />
+            <div className="relative rounded-[2rem] md:rounded-[4rem] overflow-hidden border border-white/10 glass-cinematic p-2 shadow-3xl">
               <img
                 src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1400"
                 alt="Nexlifie Vision"
-                className="rounded-[2.5rem] md:rounded-[4rem] grayscale group-hover:grayscale-0 transition-all duration-[1.5s] brightness-75 group-hover:brightness-100 group-hover:scale-105"
+                className="rounded-[1.8rem] md:rounded-[3.8rem] grayscale group-hover:grayscale-0 transition-all duration-[1.5s] brightness-75 group-hover:brightness-100"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-transparent opacity-60" />
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center lg:text-left"
           >
-            <h2 className="text-4xl sm:text-6xl md:text-[110px] font-black mb-8 md:mb-14 tracking-tighter leading-[0.9] uppercase underline underline-offset-[12px] md:underline-offset-[20px] decoration-green-500/20">WE BUILD <br />SCALABLE <br /><span className="text-white/10">FUTURES.</span></h2>
+            <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[110px] font-black mb-8 md:mb-14 tracking-tighter leading-[0.9] uppercase underline underline-offset-[10px] md:underline-offset-[20px] decoration-green-500/20">WE BUILD <br />SCALABLE <br /><span className="text-white/10">FUTURES.</span></h2>
             <div className="space-y-6 md:space-y-10 mb-10 md:mb-16">
-              <p className="text-xl md:text-2xl text-white/40 font-light leading-relaxed tracking-wide max-w-2xl mx-auto lg:mx-0">
+              <p className="text-lg md:text-2xl text-white/40 font-light leading-relaxed tracking-wide max-w-2xl mx-auto lg:mx-0">
                 Nexlifie is a modern software and digital solutions company focused on building innovative, scalable, and intelligent technology products for businesses around the world.
               </p>
-              <p className="text-xl md:text-2xl text-white/40 font-light leading-relaxed tracking-wide max-w-2xl mx-auto lg:mx-0">
-                We specialize in creating high-quality websites, powerful web applications, mobile applications, AI-driven solutions, automation systems, and result-oriented digital marketing strategies.
-              </p>
             </div>
-            <div className="grid grid-cols-2 gap-10 md:gap-20 border-l-0 lg:border-l-2 border-green-500/30 pl-0 lg:pl-16 py-4 justify-center">
+            <div className="grid grid-cols-2 gap-8 md:gap-20 border-l-0 lg:border-l-2 border-green-500/30 pl-0 lg:pl-16 py-4">
               <div>
-                <h4 className="text-5xl md:text-7xl font-black text-green-500 neon-glow-text">150+</h4>
-                <p className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-white/20 mt-2 md:mt-4">Synced Missions</p>
+                <h4 className="text-4xl md:text-7xl font-black text-green-500 neon-glow-text">150+</h4>
+                <p className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-white/20 mt-2">Projects Delivered</p>
               </div>
               <div>
-                <h4 className="text-5xl md:text-7xl font-black text-white/20 leading-none">Global</h4>
-                <p className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-white/20 mt-2 md:mt-4">Reach</p>
+                <h4 className="text-4xl md:text-7xl font-black text-white/20 leading-none uppercase">Global</h4>
+                <p className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-white/20 mt-2">Scale</p>
               </div>
             </div>
           </motion.div>
@@ -420,39 +430,30 @@ const Clients = () => {
   ];
 
   return (
-    <section id="clients" className="py-24 md:py-48 relative overflow-hidden">
-      <div className="container mx-auto px-10">
+    <section id="clients" className="py-24 md:py-32 lg:py-48 relative overflow-hidden bg-black/40">
+      <div className="container mx-auto px-4 sm:px-6 md:px-10">
         <motion.div
-          className="text-center mb-24 md:mb-32"
+          className="text-center mb-16 md:mb-32"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <span className="text-green-500 font-black tracking-[0.6em] md:tracking-[1em] text-[10px] md:text-[12px] uppercase mb-6 md:mb-8 block">Network Partners</span>
-          <h2 className="text-4xl sm:text-6xl md:text-[120px] font-black tracking-tighter uppercase leading-none">TRUSTED <span className="text-white/10">BY.</span></h2>
+          <span className="text-green-500 font-black tracking-[0.5em] md:tracking-[1em] text-[10px] md:text-[12px] uppercase mb-4 md:mb-8 block">Network Partners</span>
+          <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[120px] font-black tracking-tighter uppercase leading-none">TRUSTED <span className="text-white/10">BY.</span></h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 md:gap-12 items-center justify-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-8 lg:gap-12 items-center justify-items-center">
           {clients.map((client, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.1, y: -5 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="relative group w-full aspect-square md:aspect-auto h-24 md:h-32 flex items-center justify-center p-6 glass-cinematic rounded-2xl md:rounded-3xl border-white/5 hover:border-green-500/30 transition-all duration-500"
+              className="relative group w-full h-24 sm:h-28 md:h-32 flex items-center justify-center p-4 sm:p-6 glass-cinematic rounded-2xl border-white/5 hover:border-green-500/30 transition-all duration-500"
             >
-              <div className="absolute inset-0 bg-green-500/0 group-hover:bg-green-500/[0.03] transition-colors rounded-2xl md:rounded-3xl" />
               <img
                 src={client.logo}
                 alt={client.name}
-                className="max-w-full max-h-full object-contain transition-all duration-700 p-2"
+                className="max-w-[80%] max-h-[80%] object-contain"
                 style={client.scale ? { transform: `scale(${client.scale})` } : {}}
               />
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <span className="text-[10px] font-mono text-green-500 uppercase tracking-widest whitespace-nowrap">{client.name}</span>
-              </div>
             </motion.div>
           ))}
         </div>
@@ -462,6 +463,35 @@ const Clients = () => {
 };
 
 const Contact = () => {
+  const [status, setStatus] = useState('IDLE'); // IDLE, SENDING, SUCCESS, ERROR
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('SENDING');
+    const form = e.target;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setStatus('SUCCESS');
+        form.reset();
+        setTimeout(() => setStatus('IDLE'), 5000);
+      } else {
+        setStatus('ERROR');
+      }
+    } catch (error) {
+      setStatus('ERROR');
+    }
+  };
+
   return (
     <section id="contact" className="py-24 md:py-48 relative overflow-hidden">
       <div className="absolute top-[20%] right-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-green-500/5 blur-[100px] md:blur-[180px] rounded-full pointer-events-none" />
@@ -469,54 +499,51 @@ const Contact = () => {
       <div className="container mx-auto px-6 md:px-10 relative z-10">
         <div className="glass-cinematic p-8 md:p-16 lg:p-32 rounded-[2.5rem] md:rounded-[5rem] border-white/5 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32">
           <div className="relative text-center lg:text-left">
-            <h2 className="text-4xl sm:text-6xl md:text-[100px] lg:text-[130px] font-black mb-10 md:mb-16 tracking-tighter leading-none uppercase">START <br /><span className="text-white/10">THE MISSION.</span></h2>
+            <h2 className="text-4xl sm:text-6xl md:text-[100px] lg:text-[130px] font-black mb-10 md:mb-16 tracking-tighter leading-none uppercase">GET IN <br /><span className="text-white/10">TOUCH.</span></h2>
 
             <div className="space-y-10 md:space-y-16">
               <div className="flex flex-col gap-4 md:gap-6 group cursor-pointer">
-                <span className="text-[10px] md:text-[11px] font-black uppercase text-white/20 tracking-[0.5em] font-mono">SECURE EMAIL</span>
+                <span className="text-[10px] md:text-[11px] font-black uppercase text-white/20 tracking-[0.5em] font-mono">EMAIL US</span>
                 <p className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-white group-hover:text-green-400 transition-all duration-500 flex items-center justify-center lg:justify-start gap-4 md:gap-6">nexlifie@gmail.com <ArrowRight className="opacity-0 group-hover:opacity-100 transition-all w-6 h-6 md:w-8 md:h-8" /></p>
               </div>
               <div className="flex flex-col gap-4 md:gap-6">
-                <span className="text-[10px] md:text-[11px] font-black uppercase text-white/20 tracking-[0.5em] font-mono">BROCHURE DOMAIN</span>
+                <span className="text-[10px] md:text-[11px] font-black uppercase text-white/20 tracking-[0.5em] font-mono">VISIT WEBSITE</span>
                 <p className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-white tracking-tight">nexlifie.com</p>
               </div>
             </div>
-            <div className="mt-12 md:mt-20 flex gap-6 md:gap-8 justify-center lg:justify-start">
-              {[Twitter, Github, Linkedin].map((Icon, i) => (
-                <div key={i} className="w-12 h-12 md:w-14 md:h-14 glass-cinematic rounded-xl md:rounded-2xl flex items-center justify-center hover:bg-green-500 hover:text-black transition-all cursor-pointer">
-                  <Icon size={20} className="md:size-24" />
-                </div>
-              ))}
-            </div>
           </div>
 
-          <motion.form
-            action="https://formspree.io/f/mkgogayw"
+        <motion.form
+            onSubmit={handleSubmit}
+            action="https://formspree.io/f/xykljnyo"
             method="POST"
-            className="space-y-8 md:space-y-12"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            className="space-y-6 md:space-y-12"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
-              <div className="space-y-3 md:space-y-5">
-                <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">ENTITY_ID</label>
-                <input name="name" type="text" placeholder="Authorized Name" required className="w-full bg-white/5 border-b border-white/10 p-4 md:p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-base md:text-lg" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-12">
+              <div className="space-y-2 md:space-y-5">
+                <label className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">FULL NAME</label>
+                <input name="name" type="text" placeholder="Enter your name" required className="w-full bg-white/5 border-b border-white/10 p-4 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono" />
               </div>
-              <div className="space-y-3 md:space-y-5">
-                <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">NETWORK_ADR</label>
-                <input name="email" type="email" placeholder="Work Identity" required className="w-full bg-white/5 border-b border-white/10 p-4 md:p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-base md:text-lg" />
+              <div className="space-y-2 md:space-y-5">
+                <label className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">EMAIL ADDRESS</label>
+                <input name="email" type="email" placeholder="Enter your email" required className="w-full bg-white/5 border-b border-white/10 p-4 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono" />
               </div>
             </div>
-            <div className="space-y-3 md:space-y-5">
-              <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">TRANSMISSION_DETAILS</label>
-              <textarea name="message" placeholder="Outline your digital vision..." rows="5" required className="w-full bg-white/5 border-b border-white/10 p-4 md:p-6 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono text-base md:text-lg"></textarea>
+            <div className="space-y-2 md:space-y-5">
+              <label className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 ml-2">YOUR MESSAGE</label>
+              <textarea name="message" placeholder="How can we help you?" rows="4" required className="w-full bg-white/5 border-b border-white/10 p-4 focus:border-green-500 outline-none transition-all placeholder:text-white/10 font-mono"></textarea>
             </div>
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02, boxShadow: "0 20px 80px rgba(0, 255, 136, 0.4)" }}
-              className="w-full py-6 md:py-10 bg-green-500 text-black font-black uppercase tracking-[0.4em] sm:tracking-[0.6em] text-[12px] md:text-[14px] rounded-[1.5rem] md:rounded-[2.5rem] transition-all flex items-center justify-center gap-4 md:gap-8 group"
+              disabled={status === 'SENDING'}
+              className={`w-full py-5 md:py-10 ${status === 'SUCCESS' ? 'bg-white text-black' : status === 'ERROR' ? 'bg-red-500 text-white' : 'bg-green-500 text-black'} font-black uppercase tracking-[0.3em] md:tracking-[0.6em] text-[11px] md:text-[14px] rounded-xl md:rounded-[2.5rem] transition-all flex items-center justify-center gap-4`}
             >
-              ESTABLISH CONNECTION <Rocket size={26} className="group-hover:translate-x-4 transition-transform duration-500" />
+              {status === 'IDLE' && <>SEND MESSAGE <Rocket size={22} /></>}
+              {status === 'SENDING' && <>SENDING...</>}
+              {status === 'SUCCESS' && <>MESSAGE SENT!</>}
+              {status === 'ERROR' && <>ERROR! TRY AGAIN</>}
             </motion.button>
           </motion.form>
         </div>
@@ -616,10 +643,10 @@ function App() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 px-6 md:px-0">
               {[
-                { title: "Elite Design", icon: <Boxes />, code: "USER_EXP" },
-                { title: "AI Integrated", icon: <Activity />, code: "AI_LOGIC" },
-                { title: "High Speed", icon: <Cloud />, code: "SCALABLE" },
-                { title: "Max Security", icon: <Shield />, code: "SAFE_PRO" },
+                { title: "Elite Design", icon: <Boxes />, code: "UI/UX" },
+                { title: "AI Integrated", icon: <Activity />, code: "AI TECH" },
+                { title: "High Speed", icon: <Cloud />, code: "CL0UD" },
+                { title: "Max Security", icon: <Shield />, code: "SECURE" },
               ].map((feature, i) => (
                 <motion.div
                   key={i}
