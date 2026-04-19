@@ -107,7 +107,7 @@ const Navbar = () => {
                 animate={{ x: ['100%', '-100%'] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
               />
-              <img src={logo} alt="Nexlifie Logo" className="h-8 sm:h-10 md:h-14 w-auto relative z-10 brightness-110 drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]" />
+               <img src={logo} alt="Nexlifie Logo" className="h-8 sm:h-10 md:h-14 w-auto relative z-10 brightness-110 drop-shadow-[0_0_15px_rgba(34,197,94,0.4)] transition-all duration-500" />
               <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-green-500/50 rounded-tl-md group-hover:w-4 group-hover:h-4 transition-all duration-500" />
               <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-green-500/50 rounded-br-md group-hover:w-4 group-hover:h-4 transition-all duration-500" />
             </motion.div>
@@ -209,9 +209,9 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1 className="text-5xl sm:text-7xl md:text-9xl lg:text-[180px] xl:text-[220px] font-black leading-[0.8] tracking-tighter mb-8 md:mb-12 text-white font-heading relative inline-block">
+          <h1 className="text-4xl xs:text-5xl sm:text-7xl md:text-9xl lg:text-[180px] xl:text-[220px] font-black leading-[1.1] md:leading-[0.8] tracking-tighter mb-8 md:mb-12 text-white font-heading relative inline-block break-words max-w-full">
             Nexlifie
-            <div className="absolute -inset-10 md:-inset-20 bg-green-500/15 blur-[60px] md:blur-[140px] -z-10 rounded-full animate-pulse" />
+            <div className="absolute -inset-10 md:-inset-20 bg-green-500/10 blur-[60px] md:blur-[140px] -z-10 rounded-full animate-pulse" />
           </h1>
 
           <p className="text-[10px] sm:text-xs md:text-2xl font-mono text-green-400 tracking-[0.3em] sm:tracking-[0.8em] uppercase flex justify-center items-center gap-3 sm:gap-6 mb-10 md:mb-16 neon-glow-text">
@@ -326,7 +326,7 @@ const About = () => {
               <img
                 src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1400"
                 alt="Nexlifie Vision"
-                className="rounded-[1.8rem] md:rounded-[3.8rem] grayscale group-hover:grayscale-0 transition-all duration-[1.5s] brightness-75 group-hover:brightness-100"
+                className="rounded-[1.8rem] md:rounded-[3.8rem] transition-all duration-[1.5s] brightness-90 group-hover:brightness-100"
               />
             </div>
           </motion.div>
@@ -343,12 +343,12 @@ const About = () => {
                 Nexlifie is a modern software and digital solutions company focused on building innovative, scalable, and intelligent technology products for businesses around the world.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-8 md:gap-20 border-l-0 lg:border-l-2 border-green-500/30 pl-0 lg:pl-16 py-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-20 border-l-0 lg:border-l-2 border-green-500/30 pl-0 lg:pl-16 py-4">
+              <div className="glass-cinematic p-6 rounded-2xl border-white/5 sm:bg-transparent sm:border-none sm:p-0">
                 <h4 className="text-4xl md:text-7xl font-black text-green-500 neon-glow-text">150+</h4>
                 <p className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-white/20 mt-2">Projects Delivered</p>
               </div>
-              <div>
+              <div className="glass-cinematic p-6 rounded-2xl border-white/5 sm:bg-transparent sm:border-none sm:p-0">
                 <h4 className="text-4xl md:text-7xl font-black text-white/20 leading-none uppercase">Global</h4>
                 <p className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-white/20 mt-2">Scale</p>
               </div>
@@ -446,12 +446,12 @@ const Clients = () => {
           {clients.map((client, i) => (
             <motion.div
               key={i}
-              className="relative group w-full h-24 sm:h-28 md:h-32 flex items-center justify-center p-4 sm:p-6 glass-cinematic rounded-2xl border-white/5 hover:border-green-500/30 transition-all duration-500"
+              className="relative group w-full h-24 sm:h-28 md:h-32 lg:h-40 flex items-center justify-center p-2 md:p-4 glass-cinematic rounded-2xl border-white/5 hover:border-green-500/30 transition-all duration-500"
             >
               <img
                 src={client.logo}
                 alt={client.name}
-                className="max-w-[80%] max-h-[80%] object-contain"
+                className="max-w-[90%] max-h-[90%] object-contain transition-all duration-500"
                 style={client.scale ? { transform: `scale(${client.scale})` } : {}}
               />
             </motion.div>
@@ -636,9 +636,9 @@ function App() {
         {/* Global Features Section (Level 7) */}
         <section className="py-48 relative">
           <div className="container mx-auto px-10">
-            <div className="text-center mb-24 md:mb-40">
-              <h2 className="text-4xl sm:text-6xl md:text-[140px] font-black tracking-tighter mb-6 md:mb-8 text-white uppercase"><span className="text-white/10 text-glow">WHY</span> NEXLIFIE?</h2>
-              <div className="w-40 md:w-60 h-[2px] md:h-[3px] bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto" />
+            <div className="text-center mb-16 md:mb-40">
+              <h2 className="text-4xl sm:text-6xl md:text-9xl lg:text-[140px] font-black tracking-tighter mb-6 md:mb-8 text-white uppercase leading-[1.1] md:leading-none"><span className="text-white/10 text-glow">WHY</span> NEXLIFIE?</h2>
+              <div className="w-20 md:w-60 h-[2px] md:h-[3px] bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 px-6 md:px-0">
