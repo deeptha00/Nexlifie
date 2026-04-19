@@ -79,6 +79,17 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenuOpen]);
+
   const navLinks = [
     { name: 'Services', href: '#services' },
     { name: 'About', href: '#about' },
@@ -86,8 +97,26 @@ const Navbar = () => {
     { name: 'Contact', href: '#contact' },
   ];
 
+  // Custom Animated Hamburger Icon
+  const HamburgerIcon = ({ isOpen }) => (
+    <div className="w-8 h-8 flex flex-col justify-center items-center gap-1.5 relative">
+      <motion.span
+        animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+        className="w-full h-[2px] bg-white rounded-full block origin-center transition-colors group-hover:bg-green-400"
+      />
+      <motion.span
+        animate={isOpen ? { opacity: 0, x: -20 } : { opacity: 1, x: 0 }}
+        className="w-full h-[2px] bg-white rounded-full block transition-colors group-hover:bg-green-400"
+      />
+      <motion.span
+        animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+        className="w-full h-[2px] bg-white rounded-full block origin-center transition-colors group-hover:bg-green-400"
+      />
+    </div>
+  );
+
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${isScrolled ? 'py-3 md:py-4 bg-black/80 backdrop-blur-3xl border-b border-white/10' : 'py-5 md:py-8 bg-gradient-to-b from-black/60 to-transparent'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${isScrolled || mobileMenuOpen ? 'py-3 md:py-4 bg-black/80 backdrop-blur-3xl border-b border-white/10' : 'py-5 md:py-8 bg-gradient-to-b from-black/60 to-transparent'}`}>
       <div className="container mx-auto px-4 sm:px-6 md:px-10 flex justify-between items-center">
         <motion.a
           href="#"
@@ -136,8 +165,12 @@ const Navbar = () => {
           </motion.button>
         </div>
 
-        <button className="lg:hidden text-white p-2 z-[110] hover:text-green-400" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        <button 
+          className="lg:hidden text-white p-2 z-[150] relative group transition-all" 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle Menu"
+        >
+          <HamburgerIcon isOpen={mobileMenuOpen} />
         </button>
       </div>
 
@@ -145,31 +178,70 @@ const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[105] flex flex-col justify-center items-center gap-10 p-10 lg:hidden"
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 bg-[#020202]/98 backdrop-blur-3xl z-[140] flex flex-col justify-center items-center lg:hidden"
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-4xl font-black uppercase tracking-widest text-white hover:text-green-400 transition-all"
-                onClick={() => setMobileMenuOpen(false)}
+            {/* Background Decorations */}
+            <div className="absolute inset-0 digital-grid-system opacity-20 pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-green-500/5 to-transparent pointer-events-none" />
+            
+            <div className="relative z-10 flex flex-col items-center gap-10 w-full px-10">
+              <motion.span 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-[10px] font-mono text-green-500/40 tracking-[1em] uppercase mb-4"
               >
-                {link.name}
-              </a>
-            ))}
-            <button 
-              className="mt-10 px-12 py-5 bg-green-500 text-black font-black uppercase tracking-widest rounded-2xl w-full max-w-xs shadow-[0_0_40px_rgba(0,255,136,0.3)]"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Launch System
-            </button>
+                Navigation // System
+              </motion.span>
+              
+              {navLinks.map((link, i) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  initial={{ opacity: 0, y: 30, rotateX: -30 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                  transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
+                  className="text-5xl xs:text-6xl font-black uppercase tracking-tighter text-white hover:text-green-400 transition-all group relative"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="relative z-10">{link.name}</span>
+                  <motion.span 
+                    className="absolute -bottom-2 left-0 w-0 h-1 bg-green-500 group-hover:w-full transition-all duration-500"
+                  />
+                </motion.a>
+              ))}
+
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 }}
+                className="w-full max-w-xs mt-10"
+              >
+                <button 
+                  className="w-full py-6 bg-green-500 text-black font-black uppercase tracking-[0.3em] rounded-2xl shadow-[0_0_50px_rgba(0,255,136,0.2)] hover:shadow-[0_0_70px_rgba(0,255,136,0.4)] transition-all active:scale-95 relative overflow-hidden group"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  <span className="relative z-10">Launch System</span>
+                  <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                </button>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="absolute bottom-10 flex flex-col items-center gap-2"
+              >
+                <div className="w-12 h-[1px] bg-white/10" />
+                <span className="text-[9px] font-mono text-white/20 tracking-widest uppercase">Protocol Integrated // 2026</span>
+              </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
