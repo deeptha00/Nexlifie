@@ -802,7 +802,7 @@ const Contact = () => {
                   onClick={handleInitialize}
                   className={`bg-green-500 text-black px-6 py-3 rounded-xl font-bold text-xs tracking-wider uppercase flex items-center gap-2 transition-all ${!prompt.trim() ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:shadow-[0_0_30px_rgba(0,255,136,0.5)]'}`}
                 >
-                  Analyze <Rocket size={14} />
+                  Send <Rocket size={14} />
                 </motion.button>
               )}
 
