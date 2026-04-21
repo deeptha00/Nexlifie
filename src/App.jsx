@@ -721,7 +721,7 @@ const Contact = () => {
                       <textarea
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        placeholder="e.g., We need a cross-platform mobile app for booking premium barber services with an AI styling assistant..."
+                        placeholder="e.g., We need a cross-platform mobile app for booking Reservation services with an AI styling assistant..."
                         className="w-full bg-transparent border-none outline-none text-white/90 placeholder:text-white/20 resize-none min-h-[100px] focus:ring-0 p-0 shadow-none focus:outline-none"
                         style={{ boxShadow: 'none' }}
                       />
