@@ -21,6 +21,20 @@ import client5 from './assets/Logos/eyeluxe_logo.png';
 import client6 from './assets/Logos/keralasoul_logo.png';
 import client7 from './assets/Logos/trainifie_logo.png';
 
+// --- Custom Icons ---
+const WhatsAppIcon = ({ size = 24, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+  >
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+  </svg>
+);
+
 // --- Global UI Components ---
 
 const NoiseOverlay = () => <div className="noise-overlay" />;
@@ -738,7 +752,7 @@ const Contact = () => {
                 <div className="flex items-start gap-4">
                   <span className="text-green-500 w-24 shrink-0 select-none">NEXLIFIE{'>'}</span>
                   <div className="text-white/80">
-                    <TypewriterText text="Initiating semantic analysis of project scope..." speed={10} />
+                    <TypewriterText text="Analyzing your requirements..." speed={10} />
                     {step === 'ANALYZING' && <motion.span animate={{ opacity: [0, 1, 0] }} transition={{ duration: 0.8, repeat: Infinity }} className="inline-block w-2 h-4 bg-green-500 ml-1 translate-y-1"></motion.span>}
                   </div>
                 </div>
@@ -749,7 +763,7 @@ const Contact = () => {
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start gap-4 transition-opacity duration-1000">
                   <span className="text-green-500 w-24 shrink-0 select-none">NEXLIFIE{'>'}</span>
                   <div className="w-full">
-                    <p className="text-green-400 mb-4 font-bold border-b border-green-500/20 pb-2 inline-block">-- ARCHITECTURE BLUEPRINT GENERATED --</p>
+                    <p className="text-green-400 mb-4 font-bold border-b border-green-500/20 pb-2 inline-block">-- BLUEPRINT GENERATED --</p>
                     <div className="space-y-3 mb-6 bg-green-500/5 p-4 md:p-6 rounded-xl border border-green-500/20 w-full text-white/80 shadow-[0_0_30px_rgba(34,197,94,0.05)]">
                       <p><span className="text-white/40 uppercase tracking-wider text-[10px] w-24 inline-block">Type:</span> <span className="text-white">{blueprint.type}</span></p>
                       <p><span className="text-white/40 uppercase tracking-wider text-[10px] w-24 inline-block">Focus:</span> <span className="text-green-400">{blueprint.focus}</span></p>
@@ -807,14 +821,17 @@ const Contact = () => {
               )}
 
               {step === 'READY' && (
-                <div className="flex w-full md:w-auto flex-col md:flex-row gap-3">
-                  <div className="relative w-full md:w-56">
+                <div className="flex w-full md:w-auto flex-col md:flex-row gap-3 items-center">
+                  <div className="relative w-full md:w-64">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                      <Phone size={14} className={leadPhone.length > 0 ? (isValidPhone ? "text-green-500" : "text-red-500") : "text-white/40"} />
+                    </div>
                     <input
                       type="tel"
                       value={leadPhone}
                       onChange={(e) => setLeadPhone(e.target.value)}
-                      placeholder="Enter phone number..."
-                      className={`bg-black/50 border rounded-xl px-4 py-3 text-[10px] md:text-xs text-white outline-none w-full transition-colors ${leadPhone.length > 0 && !isValidPhone ? 'border-red-500/50 focus:border-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.2)]' : 'border-white/10 focus:border-green-500'}`}
+                      placeholder="Enter Phone Number"
+                      className={`bg-white/5 backdrop-blur-md border rounded-xl pl-10 pr-4 py-3 text-[10px] md:text-xs text-white font-mono tracking-widest outline-none w-full transition-all focus:bg-white/10 ${leadPhone.length > 0 && !isValidPhone ? 'border-red-500/50 focus:border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.15)]' : 'border-white/20 focus:border-green-500/80 focus:shadow-[0_0_20px_rgba(34,197,94,0.2)]'}`}
                     />
                     {leadPhone.length > 0 && !isValidPhone && (
                       <span className="absolute -bottom-5 left-2 text-[9px] text-red-500 animate-pulse font-mono tracking-widest uppercase">Minimum 10 Digits</span>
@@ -826,9 +843,9 @@ const Contact = () => {
                     whileTap={isValidPhone ? { scale: 0.95 } : {}}
                     disabled={!isValidPhone}
                     onClick={() => handleSubmitToEngineering(leadPhone)}
-                    className={`px-4 md:px-6 py-3 rounded-xl font-bold text-[10px] md:text-xs tracking-wider uppercase flex items-center justify-center gap-2 transition-all ${isValidPhone ? 'bg-white text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]' : 'bg-white/10 text-white/30 cursor-not-allowed grayscale'}`}
+                    className={`px-4 md:px-8 py-3 rounded-xl font-black text-[10px] md:text-xs tracking-wider uppercase flex items-center justify-center gap-3 transition-all ${isValidPhone ? 'bg-green-500 text-black hover:shadow-[0_0_30px_rgba(34,197,94,0.4)]' : 'bg-white/5 text-white/40 border border-white/10 cursor-not-allowed'}`}
                   >
-                    Send To Nexlifie <ArrowRight size={14} />
+                    Send <Rocket size={14} />
                   </motion.button>
                 </div>
               )}
@@ -962,6 +979,21 @@ function App() {
       </main>
 
       <Footer />
+
+      {/* Floating WhatsApp Button */}
+      <motion.a
+        href="https://wa.me/919591522856?text=Hi%20Nexlifie!%20I%20am%20interested%20in%20your%20services."
+        target="_blank"
+        rel="noopener noreferrer"
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] w-14 h-14 md:w-16 md:h-16 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:shadow-[0_0_50px_rgba(34,197,94,0.7)] transition-shadow text-black group"
+      >
+        <div className="absolute -inset-2 bg-green-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+        <WhatsAppIcon size={32} className="relative z-10" />
+      </motion.a>
     </div>
   );
 }
