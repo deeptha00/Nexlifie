@@ -27,9 +27,9 @@ const Clients = () => {
 
   return (
     <section id="clients" className="pt-8 md:pt-16 lg:pt-20 pb-20 md:pb-32 relative overflow-hidden bg-black/40">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-green-500/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 -translate-x-1/2" />
-      <div className="absolute top-1/2 right-0 w-96 h-96 bg-green-500/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+      {/* Ambient background glows - hidden on mobile to improve performance */}
+      <div className="hidden md:block absolute top-1/2 left-0 w-96 h-96 bg-green-500/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 -translate-x-1/2" />
+      <div className="hidden md:block absolute top-1/2 right-0 w-96 h-96 bg-green-500/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
 
       <div className="container mx-auto px-4 sm:px-6 md:px-10 relative z-20">
         <motion.div
@@ -61,15 +61,7 @@ const Clients = () => {
 
         {/* Row 1 - Left to Right */}
         <div className="relative flex overflow-hidden group">
-          <motion.div
-            className="flex items-center gap-6 md:gap-10 w-max pr-6 md:pr-10"
-            animate={{ x: ["-50%", "0%"] }}
-            transition={{
-              duration: 40,
-              ease: "linear",
-              repeat: Infinity,
-            }}
-          >
+          <div className="flex items-center gap-6 md:gap-10 w-max pr-6 md:pr-10 animate-marquee-reverse hover:[animation-play-state:paused]">
             {marqueeClients.map((client, i) => (
               <div
                 key={`row1-${i}`}
@@ -88,7 +80,7 @@ const Clients = () => {
                 </div>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
 
 
