@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import { Boxes, Activity, Cloud, Shield } from 'lucide-react';
 
 const WhyNexlifie = () => (
-  <section className="py-48 relative">
+  <section className="py-16 md:py-24 relative">
     <div className="container mx-auto px-10">
-      <div className="text-center mb-16 md:mb-40">
+      <div className="text-center mb-16 md:mb-24">
         <h2 className="text-4xl sm:text-6xl md:text-9xl lg:text-[140px] font-black tracking-tighter mb-6 md:mb-8 text-white uppercase leading-[1.1] md:leading-none">
           <span className="text-white/10 text-glow">WHY</span> NEXLIFIE?
         </h2>

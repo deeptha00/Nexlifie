@@ -42,7 +42,7 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="py-24 md:py-32 relative overflow-hidden bg-[#020202]">
+    <section id="services" className="py-16 md:py-20 relative overflow-hidden bg-[#020202]">
       {/* Background Decor */}
       <div className="absolute inset-0 digital-grid-system opacity-[0.03] pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-green-500/10 blur-[150px] rounded-full pointer-events-none" />
@@ -51,18 +51,18 @@ const Services = () => {
         
         {/* Header */}
         <motion.div
-          className="mb-12 md:mb-16 flex flex-col items-center text-center px-4"
+          className="mb-4 md:mb-6 flex flex-col items-center text-center px-4"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-3">
             <div className="w-12 h-[1px] bg-green-500" />
             <span className="text-[10px] md:text-xs font-mono text-green-500 tracking-[0.4em] uppercase">System Capabilities</span>
             <div className="w-12 h-[1px] bg-green-500" />
           </div>
-          <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-[100px] font-black tracking-tighter leading-[0.9] uppercase drop-shadow-2xl mb-8">
+          <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-[100px] font-black tracking-tighter leading-[0.9] uppercase drop-shadow-2xl">
             Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-500 to-emerald-600">Services</span>
           </h2>
         </motion.div>
@@ -93,7 +93,7 @@ const Services = () => {
             coverflowEffect={{
               rotate: 0,
               stretch: 0,
-              depth: 200,
+              depth: 150,
               modifier: 1,
               slideShadows: true,
               scale: 0.9,
@@ -105,14 +105,14 @@ const Services = () => {
             }}
             pagination={{ clickable: true, dynamicBullets: true }}
             modules={[EffectCoverflow, Pagination, Autoplay]}
-            className="w-full !pt-10 !pb-20"
+            className="w-full !pt-4 !pb-12"
           >
             {services.map((s, i) => {
               const Icon = s.icon;
               return (
-                <SwiperSlide key={i} className="!w-[320px] sm:!w-[400px] md:!w-[500px]">
-                  <Link to={`/services/${s.slug}`} className="block h-[480px] md:h-[580px]">
-                    <div className="w-full h-full bg-[#020202] rounded-[3rem] p-8 md:p-10 relative overflow-hidden border border-white/10 flex flex-col group shadow-[0_30px_60px_rgba(0,0,0,0.8)] cursor-pointer hover:border-green-500/40 transition-all duration-500">
+                <SwiperSlide key={i} className="!w-[280px] sm:!w-[320px] md:!w-[380px]">
+                  <Link to={`/services/${s.slug}`} className="block h-[380px] md:h-[460px]">
+                    <div className="w-full h-full bg-[#020202] rounded-[2.5rem] p-6 md:p-8 relative overflow-hidden border border-white/10 flex flex-col group shadow-[0_20px_40px_rgba(0,0,0,0.8)] cursor-pointer hover:border-green-500/40 transition-all duration-500">
                     
                     {/* Premium Background Image */}
                     <div className="absolute inset-0 w-full h-full z-0">

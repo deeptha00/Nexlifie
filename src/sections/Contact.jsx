@@ -76,18 +76,18 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 md:py-48 relative overflow-hidden">
+    <section id="contact" className="pt-20 pb-24 md:pt-32 md:pb-32 relative overflow-hidden">
       <div className="absolute top-[20%] right-[-10%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-green-500/5 blur-[100px] md:blur-[180px] rounded-full pointer-events-none z-0" />
 
       <div className="container mx-auto px-6 md:px-10 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left Side */}
           <div className="relative text-center lg:text-left">
-            <span className="text-green-500 font-black tracking-[0.5em] md:tracking-[0.8em] text-[10px] md:text-[12px] uppercase mb-6 block">Nexlifie AI Architect</span>
-            <h2 className="text-4xl sm:text-6xl md:text-[80px] lg:text-[100px] font-black mb-8 md:mb-12 tracking-tighter leading-[0.9] uppercase">
+            <span className="text-green-500 font-black tracking-[0.5em] md:tracking-[0.8em] text-[10px] md:text-[12px] uppercase mb-4 md:mb-6 block">Connect With Us</span>
+            <h2 className="text-4xl sm:text-5xl md:text-[60px] lg:text-[70px] font-black mb-6 md:mb-8 tracking-tighter leading-[0.95] uppercase">
               ENGINEER <br /><span className="text-white/10">THE FUTURE.</span>
             </h2>
-            <p className="text-base md:text-xl text-white/50 font-light leading-relaxed tracking-wide max-w-lg mx-auto lg:mx-0 mb-10">
+            <p className="text-sm md:text-lg text-white/50 font-light leading-relaxed tracking-wide max-w-lg mx-auto lg:mx-0 mb-6 md:mb-8">
               Skip the standard form. Describe your vision to our AI Architect below. It will analyze your requirements and instantly generate a strategic engineering blueprint.
             </p>
 
@@ -117,7 +117,7 @@ const Contact = () => {
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            className="glass-cinematic rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden flex flex-col h-[500px] md:h-[650px] relative bg-[#050505]/95 backdrop-blur-3xl"
+            className="glass-cinematic rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden flex flex-col h-[450px] md:h-[520px] relative bg-[#050505]/95 backdrop-blur-3xl"
           >
             {/* Terminal Header */}
             <div className="bg-white/5 px-6 py-4 flex items-center gap-4 border-b border-white/5 shrink-0">
