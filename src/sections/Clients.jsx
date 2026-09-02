@@ -8,6 +8,7 @@ import client6 from '../assets/Logos/keralasoul_logo.png';
 import client7 from '../assets/Logos/trainifie_logo.png';
 import client8 from '../assets/Logos/E-Kody.png';
 import client9 from '../assets/Logos/Orzen.webp';
+import client10 from '../assets/Logos/logo 2.png';
 
 const Clients = () => {
   const clients = [
@@ -20,6 +21,7 @@ const Clients = () => {
     { name: "Trainifie", logo: client7, scale: 2.2 },
     { name: "E-Kody", logo: client8 },
     { name: "Orzen", logo: client9 },
+    { name: "RR Ventures", logo: client10 },
   ];
 
   // Duplicate for seamless infinite scrolling
