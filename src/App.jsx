@@ -1,25 +1,18 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import ServicesPage from './pages/ServicesPage';
-import AboutPage from './pages/AboutPage';
-import TestimonialsPage from './pages/TestimonialsPage';
-import ClientsPage from './pages/ClientsPage';
-import ContactPage from './pages/ContactPage';
-import ServiceDetailPage from './pages/ServiceDetailPage';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
+import AppRoutes from './AppRoutes';
+import ScrollToTop from './components/ScrollToTop';
+import LeadPopup from './components/LeadPopup';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/testimonials" element={<TestimonialsPage />} />
-        <Route path="/clients" element={<ClientsPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/services/:slug" element={<ServiceDetailPage />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <AppRoutes />
+        <LeadPopup />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

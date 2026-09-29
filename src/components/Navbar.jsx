@@ -1,160 +1,212 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import logo from '../assets/logo.png';
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
+import logoLight from '../assets/logo-light.png';
+import logoDark from '../assets/logo-dark.png';
+import ThemeToggle from './ThemeToggle';
+import { useTheme } from '../context/ThemeContext';
+import capabilities from '../data/capabilities';
 
-const MotionLink = motion(Link);
+/* The six capability pages, surfaced as a dropdown under Development so a
+   visitor can jump straight to the one they came for. */
+const developmentLinks = capabilities.map((c) => ({
+  name: c.name,
+  to: `/services/${c.slug}`,
+  number: c.number,
+}));
+
+const navLinks = [
+  { name: 'Development', to: '/development', children: developmentLinks },
+  { name: 'Media', to: '/media' },
+  { name: 'About', to: '/about' },
+  { name: 'Clients / Work', to: '/clients' },
+  { name: 'Contact', to: '/contact' },
+];
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'unset';
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [mobileMenuOpen]);
-
-  const navLinks = [
-    { name: 'Services', to: '/services' },
-    { name: 'About', to: '/about' },
-    { name: 'Clients', to: '/clients' },
-    { name: 'Contact', to: '/contact' },
-  ];
-
-  const HamburgerIcon = ({ isOpen }) => (
-    <div className="w-8 h-8 flex flex-col justify-center items-center gap-1.5 relative">
-      <motion.span animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }} className="w-full h-[2px] bg-white rounded-full block origin-center transition-colors group-hover:bg-green-400" />
-      <motion.span animate={isOpen ? { opacity: 0, x: -20 } : { opacity: 1, x: 0 }} className="w-full h-[2px] bg-white rounded-full block transition-colors group-hover:bg-green-400" />
-      <motion.span animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }} className="w-full h-[2px] bg-white rounded-full block origin-center transition-colors group-hover:bg-green-400" />
-    </div>
-  );
+  const [open, setOpen] = useState(false);
+  const [mobileDevOpen, setMobileDevOpen] = useState(false);
+  const location = useLocation();
+  const { theme } = useTheme();
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${isScrolled || mobileMenuOpen ? 'py-3 md:py-4 bg-black/80 backdrop-blur-3xl border-b border-white/10' : 'py-5 md:py-8 bg-gradient-to-b from-black/60 to-transparent'}`}>
-      <div className="container mx-auto px-4 sm:px-6 md:px-10 flex justify-between items-center">
-        <MotionLink
-          to="/"
-          className="flex items-center group"
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <img 
-            src={logo} 
-            alt="Nexlifie Logo" 
-            className="h-10 sm:h-12 md:h-14 w-auto scale-[1.5] md:scale-[2] xl:scale-[2.5] origin-left brightness-110 drop-shadow-[0_0_15px_rgba(34,197,94,0.3)] group-hover:drop-shadow-[0_0_25px_rgba(34,197,94,0.6)] transition-all duration-500" 
-          />
-        </MotionLink>
+    <header className="sticky top-0 z-[100] bg-[var(--header-bg)] backdrop-blur-md border-b border-[rgb(var(--ink-rgb)/10%)]">
+      <div className="mx-auto max-w-[1320px] px-6 md:px-10 h-16 md:h-[72px] flex items-center justify-between">
+        <Link to="/" className="flex items-center shrink-0">
+          <img src={theme === 'dark' ? logoDark : logoLight} alt="Nexlifie" className="h-9 sm:h-10 w-auto scale-[2.4] md:scale-[2.9] origin-left" />
+        </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden lg:flex items-center gap-8 xl:gap-14">
-          {navLinks.map((link, i) => (
-            <MotionLink
-              key={link.name}
-              to={link.to}
-              className="text-[11px] xl:text-[12px] font-black uppercase tracking-[0.22em] text-white hover:text-green-400 transition-all"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              {link.name}
-            </MotionLink>
-          ))}
-          <motion.div className="h-8 w-[1px] bg-white/15 mx-2 xl:mx-4" />
-          <motion.button
-            onClick={() => navigate('/contact')}
-            className="px-6 xl:px-8 py-3 glass-cinematic border-green-500/40 text-green-400 text-[11px] xl:text-[12px] font-black uppercase tracking-[0.2em] rounded-full hover:bg-green-500 hover:text-black transition-all"
+        <nav className="hidden lg:flex items-center gap-9">
+          {navLinks.map((link) => {
+            const isActive =
+              location.pathname === link.to ||
+              (link.children ?? []).some((c) => location.pathname === c.to);
+            return (
+              <div key={link.name} className="relative group">
+                <Link
+                  to={link.to}
+                  className="relative flex items-center gap-1 py-2 text-[13px] font-medium tracking-wide text-[rgb(var(--ink-rgb)/70%)] hover:text-[rgb(var(--ink-rgb))] transition-colors"
+                >
+                  {link.name}
+                  {link.children && (
+                    <ChevronDown
+                      size={13}
+                      className="transition-transform duration-200 group-hover:rotate-180"
+                      aria-hidden="true"
+                    />
+                  )}
+                  {isActive && (
+                    <motion.span
+                      layoutId="global-nav-dot"
+                      className="absolute left-1/2 -translate-x-1/2 -bottom-0.5 w-1 h-1 rounded-full bg-green-600"
+                    />
+                  )}
+                </Link>
+
+                {link.children && (
+                  <div
+                    className="absolute left-1/2 top-full -translate-x-1/2 pt-3 opacity-0 invisible -translate-y-1 pointer-events-none
+                      transition-[opacity,transform,visibility] duration-200 ease-out
+                      group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto
+                      focus-within:opacity-100 focus-within:visible focus-within:translate-y-0 focus-within:pointer-events-auto"
+                  >
+                    <div className="w-72 rounded-2xl border border-[rgb(var(--ink-rgb)/10%)] bg-[var(--header-bg)] backdrop-blur-md shadow-[var(--shadow-soft)] p-2">
+                      {link.children.map((child) => (
+                        <Link
+                          key={child.to}
+                          to={child.to}
+                          className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-[rgb(var(--ink-rgb)/6%)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                        >
+                          <span className="font-mono text-[10px] text-green-600 shrink-0">{child.number}</span>
+                          <span className="text-[13px] font-medium text-[rgb(var(--ink-rgb)/80%)]">{child.name}</span>
+                        </Link>
+                      ))}
+                      <div className="my-1 border-t border-[rgb(var(--ink-rgb)/8%)]" />
+                      <Link
+                        to={link.to}
+                        className="flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-semibold text-green-600 hover:bg-green-600/[0.06] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+                      >
+                        Development Overview
+                        <ArrowRight size={13} />
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-4 md:gap-5">
+          <ThemeToggle className="hidden sm:flex !border-[rgb(var(--ink-rgb)/15%)] !bg-[rgb(var(--ink-rgb)/5%)]" />
+          <Link
+            to="/contact"
+            className="hidden sm:inline-flex items-center gap-2 bg-[rgb(var(--ink-rgb))] text-[var(--bg-dark)] text-[13px] font-semibold tracking-wide px-5 py-2.5 rounded-2xl hover:scale-[1.03] active:scale-[0.97] transition-transform group"
           >
-            Launch System
-          </motion.button>
+            Let's Talk
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <button
+            className="lg:hidden text-[rgb(var(--ink-rgb))] p-1.5"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
-
-        {/* Mobile Hamburger */}
-        <button
-          className="lg:hidden text-white p-2 z-[150] relative group transition-all"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle Menu"
-        >
-          <HamburgerIcon isOpen={mobileMenuOpen} />
-        </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {open && (
           <motion.div
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 bg-[#020202]/98 backdrop-blur-3xl z-[140] flex flex-col justify-center items-center lg:hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:hidden overflow-hidden border-t border-[rgb(var(--ink-rgb)/10%)] bg-[var(--bg-dark)]"
           >
-            <div className="absolute inset-0 digital-grid-system opacity-20 pointer-events-none" />
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-green-500/5 to-transparent pointer-events-none" />
+            <div className="px-6 py-6 flex flex-col gap-1">
+              {navLinks.map((link) => {
+                const isActive =
+                  location.pathname === link.to ||
+                  (link.children ?? []).some((c) => location.pathname === c.to);
+                return (
+                  <div key={link.name} className="border-b border-[rgb(var(--ink-rgb)/8%)] last:border-b-0">
+                    <div className="flex items-center justify-between">
+                      <Link
+                        to={link.to}
+                        onClick={() => setOpen(false)}
+                        className={`flex-1 py-3 text-2xl font-semibold tracking-tight ${
+                          isActive ? 'text-green-600' : 'text-[rgb(var(--ink-rgb))]'
+                        }`}
+                      >
+                        {link.name}
+                      </Link>
+                      {link.children && (
+                        <button
+                          type="button"
+                          onClick={() => setMobileDevOpen((v) => !v)}
+                          aria-expanded={mobileDevOpen}
+                          aria-label={`${mobileDevOpen ? 'Hide' : 'Show'} ${link.name} pages`}
+                          className="p-3 -mr-3 text-[rgb(var(--ink-rgb)/50%)]"
+                        >
+                          <ChevronDown
+                            size={20}
+                            className={`transition-transform duration-200 ${mobileDevOpen ? 'rotate-180' : ''}`}
+                          />
+                        </button>
+                      )}
+                    </div>
 
-            <div className="relative z-10 flex flex-col items-center gap-10 w-full px-10">
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-[10px] font-mono text-green-500/40 tracking-[1em] uppercase mb-4"
+                    {link.children && (
+                      <AnimatePresence initial={false}>
+                        {mobileDevOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pb-3 flex flex-col gap-0.5">
+                              {link.children.map((child) => (
+                                <Link
+                                  key={child.to}
+                                  to={child.to}
+                                  onClick={() => setOpen(false)}
+                                  className={`flex items-center gap-3 py-2.5 text-[15px] font-medium ${
+                                    location.pathname === child.to
+                                      ? 'text-green-600'
+                                      : 'text-[rgb(var(--ink-rgb)/65%)]'
+                                  }`}
+                                >
+                                  <span className="font-mono text-[10px] text-green-600/70 shrink-0">
+                                    {child.number}
+                                  </span>
+                                  {child.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    )}
+                  </div>
+                );
+              })}
+              <Link
+                to="/contact"
+                onClick={() => setOpen(false)}
+                className="mt-5 inline-flex items-center justify-center gap-2 bg-[rgb(var(--ink-rgb))] text-[var(--bg-dark)] text-sm font-semibold px-6 py-4 rounded-2xl"
               >
-                Navigation // System
-              </motion.span>
-
-              {navLinks.map((link, i) => (
-                <MotionLink
-                  key={link.name}
-                  to={link.to}
-                  initial={{ opacity: 0, y: 30, rotateX: -30 }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                  transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
-                  className="text-5xl xs:text-6xl font-black uppercase tracking-tighter text-white hover:text-green-400 transition-all group relative"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span className="relative z-10">{link.name}</span>
-                  <motion.span className="absolute -bottom-2 left-0 w-0 h-1 bg-green-500 group-hover:w-full transition-all duration-500" />
-                </MotionLink>
-              ))}
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                className="w-full max-w-xs mt-10"
-              >
-                <button
-                  className="w-full py-6 bg-green-500 text-black font-black uppercase tracking-[0.3em] rounded-2xl shadow-[0_0_50px_rgba(0,255,136,0.2)] hover:shadow-[0_0_70px_rgba(0,255,136,0.4)] transition-all active:scale-95 relative overflow-hidden group"
-                  onClick={() => { setMobileMenuOpen(false); navigate('/contact'); }}
-                >
-                  <span className="relative z-10">Launch System</span>
-                  <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                </button>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="absolute bottom-10 flex flex-col items-center gap-2"
-              >
-                <div className="w-12 h-[1px] bg-white/10" />
-                <span className="text-[9px] font-mono text-white/20 tracking-widest uppercase">Protocol Integrated // 2026</span>
-              </motion.div>
+                Let's Talk <ArrowRight size={15} />
+              </Link>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <motion.div className="absolute bottom-0 left-0 right-0 h-[3px] bg-green-500 shadow-[0_0_15px_#00ff88] origin-left z-20" style={{ scaleX }} />
-    </nav>
+    </header>
   );
 };
 

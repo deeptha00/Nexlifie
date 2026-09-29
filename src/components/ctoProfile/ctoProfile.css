@@ -1,0 +1,87 @@
+/*
+ * Scoped design tokens for the CTO profile page, ported from the standalone
+ * portfolio (Tailwind v3, its own `tailwind.config.js` colors) into plain CSS
+ * custom properties so the page's Tailwind utility classes (arbitrary values,
+ * e.g. `bg-[rgb(var(--cto-base-rgb))]`) can reference them. Everything is
+ * namespaced under `.cto-profile` so it never leaks into the rest of the
+ * site, which runs its own (green/near-black) palette.
+ */
+.cto-profile {
+  --cto-base-rgb: 10 13 18;
+  --cto-surface-rgb: 16 20 27;
+  --cto-line-rgb: 35 43 55;
+  --cto-fg-rgb: 231 234 240;
+  --cto-dim-rgb: 138 147 164;
+  --cto-accent-rgb: 47 199 176;
+
+  background-color: rgb(var(--cto-base-rgb));
+  color: rgb(var(--cto-fg-rgb));
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cto-profile ::selection {
+  background: rgb(var(--cto-accent-rgb));
+  color: rgb(var(--cto-base-rgb));
+}
+
+.cto-profile .cto-wrap {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+@media (min-width: 768px) {
+  .cto-profile .cto-wrap {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.cto-profile .cto-kicker {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgb(var(--cto-accent-rgb));
+}
+
+.cto-profile .cto-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+/* Subtle engineering grid, faded toward the edges */
+.cto-profile .cto-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 30% 30%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 30% 30%, #000 20%, transparent 75%);
+}
+
+/* Architecture diagram */
+@keyframes cto-flow {
+  to { stroke-dashoffset: -24; }
+}
+.cto-profile .cto-edge { fill: none; stroke: #4a566a; stroke-width: 1.25; transition: stroke .3s, opacity .3s; }
+.cto-profile .cto-edge.on { stroke: #2fc7b0; stroke-width: 1.75; stroke-dasharray: 4 8; animation: cto-flow 1s linear infinite; }
+.cto-profile .cto-node { cursor: pointer; outline: none; transition: opacity .3s; }
+.cto-profile .cto-node rect { fill: #10141b; stroke: #2b3543; transition: fill .25s, stroke .25s; }
+.cto-profile .cto-node .t { fill: #e7eaf0; transition: fill .25s; }
+.cto-profile .cto-node .s { fill: #8a93a4; }
+.cto-profile .cto-node .bar { fill: #2fc7b0; opacity: 0.55; transition: opacity .25s; }
+.cto-profile .cto-node:hover .bar, .cto-profile .cto-node:focus .bar, .cto-profile .cto-node.sel .bar { opacity: 1; }
+.cto-profile .cto-node:hover rect, .cto-profile .cto-node:focus rect, .cto-profile .cto-node.sel rect { fill: #0f2a2c; stroke: #2fc7b0; }
+.cto-profile .cto-node:hover .t, .cto-profile .cto-node:focus .t, .cto-profile .cto-node.sel .t { fill: #2fc7b0; }
+@media (prefers-reduced-motion: reduce) {
+  .cto-profile .cto-edge.on { animation: none; }
+}

@@ -48,18 +48,20 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-5 md:gap-10 justify-center items-center px-4 md:px-0">
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(0, 255, 136, 0.6)" }}
-              onClick={() => navigate('/contact')}
+              onClick={() => navigate('/development')}
               className="w-full sm:w-auto px-10 md:px-16 py-5 md:py-7 bg-green-500 text-black font-black uppercase tracking-[0.4em] text-[10px] md:text-[13px] rounded-xl md:rounded-3xl relative group overflow-hidden"
             >
-              <span className="relative z-10">Get Started</span>
+              <span className="relative z-10 flex items-center gap-5">
+                Nexlifie Development <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
+              </span>
               <div className="absolute inset-0 bg-white/40 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05, border: "1px solid #00ff88" }}
               className="w-full sm:w-auto px-10 md:px-16 py-5 md:py-7 glass-cinematic border-white/10 text-white font-black uppercase tracking-[0.4em] text-[10px] md:text-[13px] rounded-xl md:rounded-3xl flex items-center justify-center gap-5 group"
-              onClick={() => navigate('/services')}
+              onClick={() => navigate('/media')}
             >
-              View Services <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
+              Nexlifie Media <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
             </motion.button>
           </div>
         </motion.div>

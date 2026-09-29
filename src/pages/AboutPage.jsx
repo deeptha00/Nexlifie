@@ -1,14 +1,25 @@
 import PageLayout from '../components/PageLayout';
-import About from '../sections/About';
+import { breadcrumbList } from '../lib/seo';
+import AboutHero from '../components/about/AboutHero';
+import OurStory from '../components/about/OurStory';
+import Beliefs from '../components/about/Beliefs';
+import Directors from '../components/about/Directors';
+import WhyNexlifie from '../components/about/WhyNexlifie';
+import FinalCTA from '../components/about/FinalCTA';
 
 const AboutPage = () => (
   <PageLayout
-    title="About — Nexlifie"
-    description="Nexlifie is a modern software and digital solutions company — 150+ projects delivered, built for global scale. Learn who we are and what we stand for."
-    bannerLabel="Our Story"
-    bannerTitle="About Us"
+    title="About Nexlifie — Technology Company in Bangalore"
+    description="Nexlifie is a technology company based in Bengaluru, India, building digital products, software, AI solutions and marketing systems for clients worldwide. Learn who we are and how we work."
+    canonical="/about"
+    structuredData={[breadcrumbList([{ name: 'Home', path: '/' }, { name: 'About' }])]}
   >
-    <About />
+    <AboutHero />
+    <OurStory />
+    <Beliefs />
+    <Directors />
+    <WhyNexlifie />
+    <FinalCTA />
   </PageLayout>
 );
 

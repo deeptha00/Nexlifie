@@ -4,8 +4,56 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/src/assets/logo_old.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Nexlifie — Innovate, Build, Grow. Premium software development, AI solutions, and digital automation for modern businesses." />
-    <title>Nexlifie — Innovate, Build, Grow</title>
+    <meta name="description" content="Nexlifie is a Bangalore-based technology and growth partner building websites, applications, AI solutions and digital marketing systems — for businesses in Bengaluru and worldwide." />
+    <title>Nexlifie — Web Development &amp; Digital Marketing Company in Bangalore</title>
+
+    <!-- SEO_DEFAULTS_START — dev-only fallback; scripts/prerender.mjs strips this whole block
+         and injects the real per-route canonical/OG/Twitter/JSON-LD tags at build time. -->
+    <link rel="canonical" href="https://nexlifie.com/" />
+    <meta property="og:site_name" content="Nexlifie" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Nexlifie — Innovate, Build, Grow" />
+    <meta property="og:description" content="Nexlifie — Innovate, Build, Grow. Premium software development, AI solutions, and digital automation for modern businesses." />
+    <meta property="og:url" content="https://nexlifie.com/" />
+    <meta property="og:image" content="https://nexlifie.com/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nexlifie — Innovate, Build, Grow" />
+    <meta name="twitter:description" content="Nexlifie — Innovate, Build, Grow. Premium software development, AI solutions, and digital automation for modern businesses." />
+    <meta name="twitter:image" content="https://nexlifie.com/og-image.png" />
+    <!-- SEO_DEFAULTS_END -->
+
+    <!-- Location signals: we are physically in Bengaluru but take work worldwide. -->
+    <meta name="geo.region" content="IN-KA" />
+    <meta name="geo.placename" content="Bengaluru" />
+
+    <!-- Site-wide Organization schema — present on every route.
+         NOTE: keep the address/phone here in sync with src/lib/siteConfig.js,
+         which builds the richer per-page LocalBusiness markup. Both must also
+         match the Google Business Profile exactly. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Nexlifie",
+        "url": "https://nexlifie.com",
+        "logo": "https://nexlifie.com/og-image.png",
+        "description": "Nexlifie is a Bengaluru-based technology and growth partner building websites, applications, AI solutions and digital marketing systems for businesses in Bangalore and worldwide.",
+        "email": "info@nexlifie.com",
+        "telephone": "+919591522856",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Bengaluru",
+          "addressRegion": "Karnataka",
+          "addressCountry": "IN"
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Bengaluru" },
+          { "@type": "AdministrativeArea", "name": "Karnataka" },
+          { "@type": "Country", "name": "India" },
+          { "@type": "Place", "name": "Worldwide" }
+        ]
+      }
+    </script>
     <!-- GitHub Pages SPA redirect: converts ?/path back to /path for React Router -->
     <script type="text/javascript">
       (function(l) {
@@ -19,8 +67,18 @@
         }
       }(window.location));
     </script>
+    <!-- Set theme before paint to avoid a flash of the wrong theme -->
+    <script type="text/javascript">
+      (function() {
+        try {
+          var stored = localStorage.getItem('nexlifie-theme');
+          var theme = (stored === 'light' || stored === 'dark') ? stored : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-[#020202]">
+  <body class="bg-[#020202] light:bg-[#f2f3f2]">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

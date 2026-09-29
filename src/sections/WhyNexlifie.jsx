@@ -1,42 +1,43 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Boxes, Activity, Cloud, Shield } from 'lucide-react';
+import { fadeUp, staggerParent, staggerItem } from '../lib/motion';
+
+const features = [
+  { title: 'Elite Design', icon: Boxes, code: 'UI / UX' },
+  { title: 'AI Integrated', icon: Activity, code: 'AI TECH' },
+  { title: 'High Speed', icon: Cloud, code: 'CLOUD' },
+  { title: 'Max Security', icon: Shield, code: 'SECURE' },
+];
 
 const WhyNexlifie = () => (
-  <section className="py-16 md:py-24 relative">
-    <div className="container mx-auto px-10">
-      <div className="text-center mb-16 md:mb-24">
-        <h2 className="text-4xl sm:text-6xl md:text-9xl lg:text-[140px] font-black tracking-tighter mb-6 md:mb-8 text-white uppercase leading-[1.1] md:leading-none">
-          <span className="text-white/10 text-glow">WHY</span> NEXLIFIE?
+  <section className="bg-[var(--bg-dark)] py-20 md:py-32 border-t border-[rgb(var(--ink-rgb)/10%)]">
+    <div className="mx-auto max-w-[1320px] px-6 md:px-10">
+      <motion.div {...fadeUp(0)} className="max-w-2xl mb-14 md:mb-16">
+        <div className="flex items-center gap-3 mb-6">
+          <span className="w-6 h-[1px] bg-green-600" />
+          <span className="text-[11px] font-mono tracking-[0.3em] text-[rgb(var(--muted-rgb))]">WHY NEXLIFIE</span>
+        </div>
+        <h2 className="font-heading text-4xl sm:text-5xl md:text-[52px] leading-[1.1] font-bold text-[var(--secondary)] text-balance">
+          Built for businesses<br />that expect more.
         </h2>
-        <div className="w-20 md:w-60 h-[2px] md:h-[3px] bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto" />
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 px-6 md:px-0">
-        {[
-          { title: "Elite Design", icon: <Boxes />, code: "UI/UX" },
-          { title: "AI Integrated", icon: <Activity />, code: "AI TECH" },
-          { title: "High Speed", icon: <Cloud />, code: "CL0UD" },
-          { title: "Max Security", icon: <Shield />, code: "SECURE" },
-        ].map((feature, i) => (
+      <motion.div
+        {...staggerParent(0.08, 0.1)}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-l border-[rgb(var(--ink-rgb)/12%)]"
+      >
+        {features.map((feature) => (
           <motion.div
-            key={i}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            whileHover={{ y: -15, scale: 1.05 }}
-            className="p-10 md:p-16 glass-cinematic border-white/5 text-center group transition-all duration-500 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl overflow-hidden relative"
+            key={feature.title}
+            variants={staggerItem}
+            className="group border-r border-b border-[rgb(var(--ink-rgb)/12%)] p-8 md:p-10 hover:bg-[rgb(var(--ink-rgb)/1.5%)] transition-colors duration-500"
           >
-            <div className="absolute inset-x-0 bottom-0 h-1 bg-green-500/20 group-hover:bg-green-500 transition-colors" />
-            <div className="text-green-500 mb-8 md:mb-10 flex justify-center group-hover:scale-125 transition-transform duration-700">
-              {React.cloneElement(feature.icon, { size: 32 })}
-            </div>
-            <p className="text-[10px] font-mono text-white/20 mb-4 md:mb-6 tracking-widest">{feature.code}</p>
-            <h4 className="text-2xl md:text-3xl font-black font-heading uppercase tracking-tighter mb-4 md:mb-6 group-hover:text-green-400 transition-colors">
-              {feature.title}
-            </h4>
+            <feature.icon size={22} className="text-[rgb(var(--ink-rgb)/40%)] group-hover:text-green-600 group-hover:scale-110 transition-all duration-300 mb-6" />
+            <p className="font-mono text-[10px] tracking-widest text-[rgb(var(--muted-rgb))] mb-3">{feature.code}</p>
+            <h4 className="font-heading text-xl md:text-2xl font-bold text-[var(--secondary)]">{feature.title}</h4>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   </section>
 );

@@ -1,9 +1,15 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Zap, Star, ChevronDown } from 'lucide-react';
+import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Zap } from 'lucide-react';
 import servicesData from '../data/servicesData';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import WhatsAppButton from '../components/WhatsAppButton';
+import ChatbotWidget from '../components/chatbot/ChatbotWidget';
+import PageHead from '../components/PageHead';
+import { staggerParent, staggerItem } from '../lib/motion';
+import { breadcrumbList } from '../lib/seo';
 
 /* ─── Animated Counter ─────────────────────────────── */
 const AnimCounter = ({ value }) => {
@@ -41,7 +47,7 @@ const FeatureSection = ({ service }) => {
   const startTimer = useCallback(() => {
     clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
-      setActive(prev => (prev + 1) % total);
+      setActive((prev) => (prev + 1) % total);
     }, 3500);
   }, [total]);
 
@@ -52,27 +58,21 @@ const FeatureSection = ({ service }) => {
 
   const handleClick = (i) => {
     setActive(i);
-    startTimer(); // reset timer on manual click
+    startTimer();
   };
 
   return (
-    <section className="py-24 md:py-32 bg-[#030303] relative">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-      <div className="container mx-auto px-4 sm:px-6 md:px-16 max-w-6xl">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-8 h-[1px] bg-green-500" />
-          <span className="text-[10px] font-mono text-green-500 tracking-[0.4em] uppercase">What You Get</span>
+    <section className="bg-[var(--bg-dark)] py-20 md:py-32 border-t border-[rgb(var(--ink-rgb)/10%)]">
+      <div className="mx-auto max-w-[1320px] px-6 md:px-10">
+        <div className="flex items-center gap-3 mb-6">
+          <span className="w-6 h-[1px] bg-green-600" />
+          <span className="text-[11px] font-mono tracking-[0.3em] text-[rgb(var(--muted-rgb))]">WHAT YOU GET</span>
         </div>
-        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight mb-14">
-          Everything <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">Included.</span>
+        <h2 className="font-heading text-4xl sm:text-5xl md:text-[52px] leading-[1.1] font-bold tracking-tight text-[var(--secondary)] mb-14 text-balance">
+          Everything included.
         </h2>
 
-        {/* Two column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
-          {/* Left — Feature list */}
           <div className="flex flex-col">
             {service.features.map((f, i) => {
               const isActive = active === i;
@@ -81,43 +81,35 @@ const FeatureSection = ({ service }) => {
                   key={i}
                   type="button"
                   onClick={() => handleClick(i)}
-                  className="text-left py-6 border-b border-white/[0.07] focus:outline-none"
+                  className="text-left py-6 border-b border-[rgb(var(--ink-rgb)/10%)] focus:outline-none"
                 >
                   <div className="flex items-center gap-5">
-                    {/* Progress bar left */}
-                    <div className="relative w-[3px] self-stretch rounded-full bg-white/5 shrink-0">
+                    <div className="relative w-[3px] self-stretch rounded-full bg-[rgb(var(--ink-rgb)/8%)] shrink-0">
                       <div
-                        className="absolute top-0 left-0 w-full rounded-full bg-green-500"
+                        className="absolute top-0 left-0 w-full rounded-full bg-green-600"
                         style={{
                           height: isActive ? '100%' : '0%',
                           transition: isActive ? 'height 3.5s linear' : 'height 0.2s ease',
-                          boxShadow: isActive ? '0 0 8px rgba(34,197,94,0.6)' : 'none',
                         }}
                       />
                     </div>
 
-                    {/* Number */}
                     <div
                       className="w-9 h-9 rounded-full border shrink-0 flex items-center justify-center text-[11px] font-black font-mono"
                       style={{
-                        background: isActive ? '#22c55e' : 'transparent',
-                        borderColor: isActive ? '#22c55e' : 'rgba(255,255,255,0.12)',
-                        color: isActive ? '#000' : 'rgba(255,255,255,0.3)',
-                        boxShadow: isActive ? '0 0 16px rgba(34,197,94,0.5)' : 'none',
+                        background: isActive ? '#16a34a' : 'transparent',
+                        borderColor: isActive ? '#16a34a' : 'rgb(var(--ink-rgb) / 15%)',
+                        color: isActive ? '#fff' : 'rgb(var(--ink-rgb) / 35%)',
                         transition: 'all 0.4s ease',
                       }}
                     >
                       {String(i + 1).padStart(2, '0')}
                     </div>
 
-                    {/* Title & desc */}
                     <div className="flex-1">
                       <div
-                        className="text-base md:text-lg font-bold"
-                        style={{
-                          color: isActive ? '#4ade80' : 'rgba(255,255,255,0.65)',
-                          transition: 'color 0.3s ease',
-                        }}
+                        className="text-base md:text-lg font-bold transition-colors duration-300"
+                        style={{ color: isActive ? '#15803d' : 'rgb(var(--ink-rgb) / 65%)' }}
                       >
                         {f.title}
                       </div>
@@ -129,19 +121,13 @@ const FeatureSection = ({ service }) => {
                           transition: 'max-height 0.4s ease, opacity 0.3s ease',
                         }}
                       >
-                        <p className="text-white/45 text-sm leading-relaxed mt-2">
-                          {f.desc}
-                        </p>
+                        <p className="text-[rgb(var(--muted-rgb))] text-sm leading-relaxed mt-2">{f.desc}</p>
                       </div>
                     </div>
 
                     <ArrowUpRight
                       size={16}
-                      style={{
-                        color: isActive ? '#22c55e' : 'rgba(255,255,255,0.12)',
-                        flexShrink: 0,
-                        transition: 'color 0.3s ease',
-                      }}
+                      style={{ color: isActive ? '#16a34a' : 'rgb(var(--ink-rgb) / 15%)', flexShrink: 0, transition: 'color 0.3s ease' }}
                     />
                   </div>
                 </button>
@@ -149,24 +135,22 @@ const FeatureSection = ({ service }) => {
             })}
           </div>
 
-          {/* Right — Live image preview */}
           <div className="hidden lg:flex flex-col gap-4">
-            <div className="relative rounded-[2.5rem] overflow-hidden border border-white/8 shadow-2xl flex-1 min-h-[400px]">
+            <div className="relative rounded-2xl overflow-hidden border border-[rgb(var(--ink-rgb)/10%)] shadow-[var(--shadow-soft)] flex-1 min-h-[400px]">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={active}
                   src={service.image}
                   alt={service.features[active]?.title}
                   className="absolute inset-0 w-full h-full object-cover"
-                  initial={{ opacity: 0, scale: 1.06 }}
+                  initial={{ opacity: 0, scale: 1.04 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
                 />
               </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/30 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/70 via-transparent to-transparent pointer-events-none" />
 
-              {/* Bottom label */}
               <div className="absolute bottom-0 left-0 right-0 p-6 pointer-events-none">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -175,9 +159,8 @@ const FeatureSection = ({ service }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.35 }}
-                    className="bg-black/70 backdrop-blur-xl border border-white/10 rounded-2xl px-5 py-4"
                   >
-                    <p className="text-[10px] font-mono text-green-500 uppercase tracking-widest mb-1">
+                    <p className="text-[10px] font-mono text-green-400 tracking-widest mb-1">
                       Feature {String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
                     </p>
                     <p className="text-sm font-bold text-white">{service.features[active]?.title}</p>
@@ -186,7 +169,6 @@ const FeatureSection = ({ service }) => {
               </div>
             </div>
 
-            {/* Dot indicators */}
             <div className="flex items-center justify-center gap-2">
               {service.features.map((_, i) => (
                 <button
@@ -194,12 +176,7 @@ const FeatureSection = ({ service }) => {
                   type="button"
                   onClick={() => handleClick(i)}
                   className="rounded-full transition-all duration-300"
-                  style={{
-                    width: active === i ? '24px' : '6px',
-                    height: '6px',
-                    background: active === i ? '#22c55e' : 'rgba(255,255,255,0.15)',
-                    boxShadow: active === i ? '0 0 10px rgba(34,197,94,0.5)' : 'none',
-                  }}
+                  style={{ width: active === i ? '24px' : '6px', height: '6px', background: active === i ? '#16a34a' : 'rgb(var(--ink-rgb) / 15%)' }}
                 />
               ))}
             </div>
@@ -210,9 +187,6 @@ const FeatureSection = ({ service }) => {
   );
 };
 
-/* ─── Parallax Hook ─────────────────────────────────── */
-const useParallax = (v, d) => useTransform(v, [0, 1], [-d, d]);
-
 /* ─── Main Page ─────────────────────────────────────── */
 const ServiceDetailPage = () => {
   const { slug } = useParams();
@@ -221,8 +195,6 @@ const ServiceDetailPage = () => {
 
   const { scrollYProgress } = useScroll({ target: containerRef });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
-  const heroBgY = useParallax(smoothProgress, 80);
-  const heroTextY = useParallax(smoothProgress, -40);
 
   const service = servicesData.find((s) => s.slug === slug);
   const currentIndex = servicesData.findIndex((s) => s.slug === slug);
@@ -232,301 +204,138 @@ const ServiceDetailPage = () => {
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
 
   if (!service) return (
-    <div className="min-h-screen bg-[#020202] flex items-center justify-center">
+    <div className="min-h-screen bg-[var(--bg-dark)] flex items-center justify-center">
       <div className="text-center">
-        <p className="text-white/30 font-mono text-xs mb-4 tracking-widest">SERVICE_NOT_FOUND</p>
-        <button onClick={() => navigate(-1)} className="text-green-400 font-mono text-sm">← Go Back</button>
+        <p className="text-[rgb(var(--muted-rgb))] font-mono text-xs mb-4 tracking-widest">SERVICE_NOT_FOUND</p>
+        <button onClick={() => navigate(-1)} className="text-green-600 font-mono text-sm">← Go Back</button>
       </div>
     </div>
   );
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#020202] text-white overflow-x-hidden">
+    <div ref={containerRef} className="bg-[var(--bg-dark)] text-[var(--secondary)] min-h-screen">
+      <PageHead
+        title={`${service.title} — Nexlifie`}
+        description={service.description}
+        canonical={`/services/${service.slug}`}
+        ogImage={service.image}
+        structuredData={[
+          breadcrumbList([
+            { name: 'Home', path: '/' },
+            { name: 'Development', path: '/development' },
+            { name: service.title },
+          ]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: service.title,
+            description: service.description,
+            provider: {
+              '@type': 'Organization',
+              name: 'Nexlifie',
+              url: 'https://nexlifie.com',
+            },
+          },
+        ]}
+      />
       <Navbar />
 
-      {/* Reading progress bar */}
       <motion.div
-        className="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-green-400 to-emerald-600 z-[200] origin-left shadow-[0_0_10px_rgba(34,197,94,0.8)]"
+        className="fixed top-0 left-0 h-[3px] bg-green-600 z-[200] origin-left"
         style={{ scaleX: smoothProgress }}
       />
 
       {/* ═══ HERO ══════════════════════════════════════════ */}
-      <section className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
-
-        {/* Ken Burns BG */}
-        <motion.div
-          className="absolute inset-0 z-0"
-          initial={{ scale: 1.15 }}
-          animate={{ scale: 1.0 }}
-          transition={{ duration: 10, ease: 'easeOut' }}
-        >
-          <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/60 to-[#020202]/10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#020202]/90 via-[#020202]/30 to-transparent" />
-        </motion.div>
-
-        {/* Floating image panels (desktop only) */}
-        <div className="absolute inset-0 z-[1] pointer-events-none hidden md:block">
-          {/* Panel 1 */}
-          <motion.div
-            className="absolute top-16 right-[6%] w-[260px] h-[360px] rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.7)]"
-            initial={{ opacity: 0, y: -40, rotate: -3 }}
-            animate={{ opacity: 1, y: 0, rotate: -3 }}
-            transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <motion.div
-              className="w-full h-full"
-              animate={{ y: [0, -18, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <img src={service.image} alt="" className="w-full h-full object-cover scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#020202]/60" />
-              <div className="absolute inset-0 border border-green-500/20 rounded-[2rem]" />
-              <div className="absolute top-4 left-4 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,1)]" />
-                <span className="text-[9px] font-mono text-green-400 uppercase tracking-widest">Live</span>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Panel 2 */}
-          <motion.div
-            className="absolute top-[45%] right-[22%] w-[180px] h-[230px] rounded-[1.5rem] overflow-hidden border border-white/8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
-            initial={{ opacity: 0, y: 40, rotate: 4 }}
-            animate={{ opacity: 1, y: 0, rotate: 4 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <motion.div
-              className="w-full h-full"
-              animate={{ y: [0, 14, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-            >
-              <img src={service.image} alt="" className="w-full h-full object-cover scale-125" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020202]/70 to-transparent" />
-            </motion.div>
-          </motion.div>
-
-          {/* Panel 3 */}
-          <motion.div
-            className="absolute bottom-[28%] right-[8%] w-[130px] h-[170px] rounded-[1.2rem] overflow-hidden border border-white/5 shadow-[0_15px_40px_rgba(0,0,0,0.5)]"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 0.7, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.7 }}
-          >
-            <motion.div
-              className="w-full h-full"
-              animate={{ y: [0, -10, 0], x: [0, 4, 0] }}
-              transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            >
-              <img src={service.image} alt="" className="w-full h-full object-cover scale-150" />
-              <div className="absolute inset-0 bg-[#020202]/50" />
-            </motion.div>
-          </motion.div>
-
-          {/* Panel 4 */}
-          <motion.div
-            className="absolute bottom-[8%] right-[18%] w-[220px] h-[130px] rounded-[1.5rem] overflow-hidden border border-green-500/15 shadow-[0_10px_40px_rgba(34,197,94,0.1)]"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.9 }}
-          >
-            <motion.div
-              className="w-full h-full"
-              animate={{ scale: [1, 1.06, 1] }}
-              transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <img src={service.image} alt="" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#020202]/60 to-transparent" />
-            </motion.div>
-          </motion.div>
-
-          {/* Dots */}
-          <motion.div animate={{ opacity: [0.2, 0.8, 0.2] }} transition={{ duration: 3, repeat: Infinity }}
-            className="absolute top-[55%] right-[14%] w-1 h-1 rounded-full bg-green-400" />
-          <div className="absolute top-[38%] right-[28%] w-2 h-2 rounded-full border border-green-500/50" />
-          <div className="absolute top-[30%] right-[32%] w-1.5 h-1.5 rounded-full bg-green-500/30" />
-        </div>
-
-        {/* Scan line */}
-        <motion.div
-          className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-green-500/60 to-transparent z-[2] pointer-events-none"
-          initial={{ top: '0%' }}
-          animate={{ top: ['0%', '100%', '0%'] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-        />
-
-        <div className="absolute inset-0 digital-grid-system opacity-[0.05] z-[1] pointer-events-none" />
-
-        {/* Back */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-          className="absolute top-28 left-4 sm:left-6 md:left-16 z-20"
-        >
-          <button
+      <section className="pt-14 pb-20 md:pt-20 md:pb-28">
+        <div className="mx-auto max-w-[1320px] px-6 md:px-10">
+          <motion.button
+            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}
+            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.96 }}
             onClick={() => navigate(-1)}
-            className="group inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors text-xs font-mono uppercase tracking-widest"
+            className="group inline-flex items-center gap-2 text-[rgb(var(--muted-rgb))] hover:text-[var(--secondary)] transition-colors text-xs font-mono tracking-widest mb-10"
           >
             <ArrowLeft size={13} className="group-hover:-translate-x-1 transition-transform" />
             Back
-          </button>
-        </motion.div>
+          </motion.button>
 
-        {/* Status badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 1 }}
-          className="absolute top-28 right-4 sm:right-8 md:right-16 z-20 hidden md:flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full"
-        >
-          <motion.div
-            className="w-2 h-2 rounded-full bg-green-500"
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          />
-          <span className="text-[10px] font-mono text-green-400 uppercase tracking-widest">Service Active</span>
-          <span className="text-[10px] font-mono text-white/30">
-            {String(currentIndex + 1).padStart(2, '0')}/{String(servicesData.length).padStart(2, '0')}
-          </span>
-        </motion.div>
-
-        {/* Hero text */}
-        <motion.div style={{ y: heroTextY }} className="relative z-10 w-full pb-16 px-4 sm:px-6 md:px-16 max-w-[55%]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-            className="flex items-center gap-3 mb-6"
-          >
-            <div className="w-8 h-[1px] bg-green-500" />
-            <span className="text-[10px] font-mono text-green-500 tracking-[0.4em] uppercase">
-              Nexlifie — Service {String(currentIndex + 1).padStart(2, '0')}
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[clamp(40px,5.5vw,100px)] font-black tracking-tighter leading-[0.88] uppercase mb-4"
-          >
-            {service.title}
-          </motion.h1>
-
-          <div className="overflow-hidden mb-12">
-            <motion.p
-              initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-lg sm:text-xl md:text-2xl text-white/50 font-light italic"
-            >
-              "{service.tagline}"
-            </motion.p>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.7 }}
-            className="flex flex-wrap gap-8 md:gap-14"
-          >
-            {[service.stat1, service.stat2, service.stat3].map((stat, i) => (
-              <div key={i} className="flex flex-col gap-1">
-                <span className="text-4xl md:text-5xl font-black text-green-400 drop-shadow-[0_0_30px_rgba(34,197,94,0.6)]">
-                  <AnimCounter value={stat.value} />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+            <div className="lg:col-span-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
+                className="flex items-center gap-3 mb-6"
+              >
+                <span className="w-6 h-[1px] bg-green-600" />
+                <span className="text-[11px] font-mono tracking-[0.3em] text-[rgb(var(--muted-rgb))]">
+                  NEXLIFIE — SERVICE {String(currentIndex + 1).padStart(2, '0')}/{String(servicesData.length).padStart(2, '0')}
                 </span>
-                <span className="text-[10px] font-mono text-white/30 uppercase tracking-widest">{stat.label}</span>
-              </div>
-            ))}
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll hint */}
-        <motion.div
-          animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 opacity-30"
-        >
-          <span className="text-[9px] font-mono uppercase tracking-widest text-white">Scroll</span>
-          <ChevronDown size={16} className="text-white" />
-        </motion.div>
-      </section>
-
-      {/* ═══ OVERVIEW ══════════════════════════════════════ */}
-      <section className="relative py-28 md:py-36 overflow-hidden">
-        <div className="absolute -top-px left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-green-500/5 blur-[150px] rounded-full pointer-events-none" />
-
-        <div className="container mx-auto px-4 sm:px-6 md:px-16 max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-16 md:gap-24 items-center">
-
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="relative"
-            >
-              <div className="relative w-full aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-[0_60px_120px_rgba(0,0,0,0.7)] border border-white/8">
-                <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020202]/60 via-transparent to-transparent" />
-              </div>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.4 }}
-                className="absolute -bottom-8 -right-6 md:-right-12 bg-[#0a0a0a] border border-green-500/30 backdrop-blur-xl p-6 rounded-3xl shadow-[0_0_60px_rgba(34,197,94,0.2)]"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.8)] animate-pulse" />
-                  <span className="text-[10px] font-mono text-green-500 uppercase tracking-widest">Live & Active</span>
-                </div>
-                <div className="text-3xl font-black text-white">{service.stat1.value}</div>
-                <div className="text-[10px] text-white/40 font-mono mt-1">{service.stat1.label}</div>
-              </motion.div>
-              <div className="absolute -top-4 -left-4 w-24 h-24 border-l-2 border-t-2 border-green-500/40 rounded-tl-2xl" />
-            </motion.div>
-
-            <div>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-4 mb-8"
-              >
-                <div className="w-8 h-[1px] bg-green-500" />
-                <span className="text-[10px] font-mono text-green-500 tracking-[0.4em] uppercase">About This Service</span>
               </motion.div>
 
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-tight mb-8"
+              <motion.h1
+                initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-4 text-balance"
               >
-                The standard you<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">deserve.</span>
-              </motion.h2>
+                {service.title}
+              </motion.h1>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-base md:text-lg text-white/55 leading-[1.9] font-light mb-10 max-w-lg"
+                initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.25 }}
+                className="text-lg md:text-xl text-green-700 font-medium italic mb-6"
+              >
+                "{service.tagline}"
+              </motion.p>
+
+              <motion.p
+                initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-base text-[rgb(var(--muted-rgb))] leading-relaxed max-w-lg mb-8"
               >
                 {service.description}
               </motion.p>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="flex flex-wrap gap-3"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
               >
-                {[service.stat1, service.stat2, service.stat3].map((stat, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-white/[0.04] border border-white/8 px-4 py-2 rounded-full">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                    <span className="text-sm font-bold text-green-400">{stat.value}</span>
-                    <span className="text-xs text-white/30 font-mono">{stat.label}</span>
-                  </div>
-                ))}
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} className="inline-block">
+                  <Link
+                    to="/contact"
+                    className="group inline-flex items-center gap-2 bg-[#111111] text-[#F7F8F6] text-sm font-semibold px-7 py-4 rounded-2xl hover:bg-black transition-colors"
+                  >
+                    {service.cta}
+                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </motion.div>
               </motion.div>
             </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="lg:col-span-6"
+            >
+              <div className="group relative rounded-2xl overflow-hidden border border-[rgb(var(--ink-rgb)/10%)] shadow-[var(--shadow-soft)] aspect-[4/3]">
+                <img src={service.image} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              </div>
+              <motion.div
+                {...staggerParent(0.08, 0.1)}
+                className="grid grid-cols-3 border-t border-l border-[rgb(var(--ink-rgb)/12%)] mt-0"
+              >
+                {[service.stat1, service.stat2, service.stat3].map((stat, i) => (
+                  <motion.div
+                    key={i}
+                    variants={staggerItem}
+                    className="border-r border-b border-[rgb(var(--ink-rgb)/12%)] p-4 hover:bg-[rgb(var(--ink-rgb)/1.5%)] transition-colors duration-500"
+                  >
+                    <p className="text-2xl md:text-3xl font-bold text-[var(--secondary)]">
+                      <AnimCounter value={stat.value} />
+                    </p>
+                    <p className="text-[10px] font-mono text-[rgb(var(--muted-rgb))] tracking-widest mt-1">{stat.label}</p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -535,136 +344,88 @@ const ServiceDetailPage = () => {
       <FeatureSection service={service} />
 
       {/* ═══ PROCESS ═══════════════════════════════════════ */}
-      <section className="relative py-28 md:py-36 overflow-hidden">
-        <div className="absolute -top-px left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
-        <div className="absolute right-0 top-0 w-[700px] h-[700px] bg-green-500/4 blur-[180px] rounded-full pointer-events-none" />
-
-        <div className="container mx-auto px-4 sm:px-6 md:px-16 max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20"
-          >
+      <section className="bg-[var(--bg-dark)] py-20 md:py-32 border-t border-[rgb(var(--ink-rgb)/10%)]">
+        <div className="mx-auto max-w-[1320px] px-6 md:px-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14 md:mb-16">
             <div>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-8 h-[1px] bg-green-500" />
-                <span className="text-[10px] font-mono text-green-500 tracking-[0.4em] uppercase">Our Method</span>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="w-6 h-[1px] bg-green-600" />
+                <span className="text-[11px] font-mono tracking-[0.3em] text-[rgb(var(--muted-rgb))]">OUR METHOD</span>
               </div>
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight">
-                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">Process</span>
+              <h2 className="font-heading text-4xl sm:text-5xl md:text-[52px] leading-[1.1] font-bold tracking-tight text-[var(--secondary)] text-balance">
+                The process.
               </h2>
             </div>
-            <p className="text-white/30 text-sm font-mono max-w-xs leading-relaxed">
-              A battle-tested, 5-phase methodology refined across hundreds of projects.
+            <p className="text-[rgb(var(--muted-rgb))] text-sm max-w-xs leading-relaxed">
+              A battle-tested methodology refined across hundreds of projects.
             </p>
-          </motion.div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div {...staggerParent(0.08, 0.1)} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {service.process.map((step, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.65, delay: (i % 3) * 0.12 }}
-                className="relative group"
+                variants={staggerItem}
+                className="border-t border-[rgb(var(--ink-rgb)/12%)] pt-6"
               >
-                <div className="relative bg-[#050505] border border-white/[0.06] rounded-[2.5rem] p-8 md:p-10 overflow-hidden hover:border-green-500/30 transition-all duration-700 h-full flex flex-col shadow-xl">
-                  <div className="absolute -top-6 -right-4 text-[100px] md:text-[130px] font-black text-white/[0.025] leading-none select-none pointer-events-none group-hover:text-green-500/[0.06] transition-colors duration-700">
-                    {step.step}
-                  </div>
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(34,197,94,0.07),_transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                  <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent group-hover:via-green-500/50 transition-colors duration-700" />
-
-                  <div className="flex items-center gap-3 mb-8 relative z-10">
-                    <div className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center shrink-0 group-hover:bg-green-500 group-hover:border-green-500 transition-all duration-500">
-                      <Zap size={14} className="text-green-500 group-hover:text-black transition-colors duration-500" />
-                    </div>
-                    <span className="text-[10px] font-mono text-green-500/60 uppercase tracking-widest">Phase {step.step}</span>
-                  </div>
-
-                  <h3 className="text-xl md:text-2xl font-black tracking-tight text-white mb-4 relative z-10 group-hover:text-green-400 transition-colors duration-500 leading-tight">
-                    {step.title}
-                  </h3>
-                  <p className="text-white/40 text-sm leading-relaxed relative z-10 group-hover:text-white/60 transition-colors duration-500 mt-auto">
-                    {step.desc}
-                  </p>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="font-mono text-xs text-green-600 tracking-widest">{step.step}</span>
                 </div>
+                <h3 className="font-heading text-lg md:text-xl font-bold tracking-tight text-[var(--secondary)] mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-[rgb(var(--muted-rgb))] text-sm leading-relaxed">
+                  {step.desc}
+                </p>
               </motion.div>
             ))}
 
-            {/* CTA card */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.65, delay: 0.4 }}
-            >
-              <Link to="/contact" className="block h-full">
-                <div className="relative bg-gradient-to-br from-green-500 to-emerald-600 rounded-[2.5rem] p-8 md:p-10 overflow-hidden h-full flex flex-col justify-between shadow-[0_20px_60px_rgba(34,197,94,0.25)] hover:shadow-[0_30px_80px_rgba(34,197,94,0.4)] transition-shadow duration-500 cursor-pointer group min-h-[200px]">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
-                  <Star size={24} className="text-black/30 mb-auto" />
-                  <div>
-                    <h3 className="text-2xl font-black uppercase tracking-tight text-black mb-2">Ready?</h3>
-                    <p className="text-black/60 text-sm mb-6">Let's start your project today.</p>
-                    <div className="inline-flex items-center gap-2 bg-black text-green-400 px-5 py-3 rounded-full font-bold text-xs uppercase tracking-widest">
-                      {service.cta} <ArrowRight size={14} />
-                    </div>
-                  </div>
+            <motion.div variants={staggerItem} className="border-t border-[rgb(var(--ink-rgb)/12%)] pt-6">
+              <Link to="/contact" className="block h-full group">
+                <div className="flex items-center gap-2 mb-4 text-green-600">
+                  <Zap size={16} className="group-hover:scale-110 transition-transform duration-300" />
+                  <span className="font-mono text-xs tracking-widest">READY?</span>
                 </div>
+                <h3 className="font-heading text-lg md:text-xl font-bold tracking-tight text-[var(--secondary)] mb-3 group-hover:text-green-700 transition-colors">
+                  Let's start your project.
+                </h3>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--secondary)] border-b border-[rgb(var(--ink-rgb)/30%)] pb-1 group-hover:border-green-600 transition-colors">
+                  {service.cta}
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </span>
               </Link>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* ═══ CTA BANNER ════════════════════════════════════ */}
-      <section className="relative py-36 md:py-48 overflow-hidden bg-[#030303]">
-        <div className="absolute -top-px left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
-        <div className="absolute inset-0 z-0">
-          <img src={service.image} alt="" className="w-full h-full object-cover opacity-10 blur-sm scale-110" />
-          <div className="absolute inset-0 bg-[#030303]/80" />
-        </div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(34,197,94,0.15)_0%,_transparent_65%)] z-0" />
-        <div className="absolute inset-0 digital-grid-system opacity-[0.04] z-0" />
-
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 md:px-16 max-w-5xl text-center">
+      <section className="bg-[#111111] text-white py-24 md:py-32">
+        <div className="mx-auto max-w-[1320px] px-6 md:px-10">
           <motion.div
-            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.9 }}
+            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.7 }}
+            className="max-w-2xl"
           >
-            <div className="flex items-center justify-center gap-4 mb-10">
-              <div className="w-16 h-[1px] bg-green-500/60" />
-              <span className="text-[10px] font-mono text-green-500 tracking-[0.4em] uppercase">Begin Now</span>
-              <div className="w-16 h-[1px] bg-green-500/60" />
-            </div>
-
-            <h2 className="text-5xl sm:text-7xl md:text-8xl font-black uppercase tracking-tighter leading-tight mb-6 drop-shadow-2xl">
-              Let's build<br />something<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-400 to-green-600">
-                extraordinary.
-              </span>
+            <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.1] mb-6 text-balance">
+              Let's build something<br /><span className="text-green-500">extraordinary.</span>
             </h2>
-
-            <p className="text-white/30 text-base md:text-lg max-w-md mx-auto mb-14 font-light">
+            <p className="text-white/50 text-base md:text-lg max-w-md mb-10 font-light">
               No templates. No shortcuts. Just exceptional work, delivered with precision.
             </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/contact">
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: '0 0 80px rgba(34,197,94,0.5)' }}
-                  whileTap={{ scale: 0.97 }}
-                  className="relative inline-flex items-center gap-4 bg-green-500 text-black px-10 py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-sm overflow-hidden group shadow-[0_0_40px_rgba(34,197,94,0.3)]"
-                >
-                  <span className="relative z-10">{service.cta}</span>
-                  <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-                  <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                </motion.button>
+            <div className="flex flex-wrap items-center gap-6">
+              <Link
+                to="/contact"
+                className="group inline-flex items-center gap-2 bg-green-500 text-[#111111] px-7 py-4 rounded-2xl font-semibold text-sm hover:bg-green-400 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300"
+              >
+                {service.cta}
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link to="/#services">
-                <button className="inline-flex items-center gap-3 text-white/40 hover:text-white transition-colors text-sm font-mono uppercase tracking-widest">
-                  View all services <ArrowUpRight size={14} />
-                </button>
+              <Link
+                to="/#services"
+                className="group inline-flex items-center gap-2 text-sm font-semibold text-white border-b border-white/30 pb-1 hover:border-green-500 hover:text-green-400 transition-colors"
+              >
+                View all services <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
             </div>
           </motion.div>
@@ -672,34 +433,38 @@ const ServiceDetailPage = () => {
       </section>
 
       {/* ═══ PREV / NEXT ═══════════════════════════════════ */}
-      <div className="border-t border-white/[0.06] bg-[#020202]">
-        <div className="container mx-auto px-4 sm:px-6 md:px-16 max-w-7xl">
+      <div className="bg-[#111111] border-t border-white/10">
+        <div className="mx-auto max-w-[1320px] px-6 md:px-10">
           <div className="grid grid-cols-2">
             <Link
               to={`/services/${prevService.slug}`}
-              className="py-12 md:py-16 pr-8 border-r border-white/[0.06] flex flex-col gap-3 hover:bg-white/[0.02] transition-colors group"
+              className="py-10 md:py-12 pr-8 border-r border-white/10 flex flex-col gap-3 hover:bg-white/[0.03] transition-colors duration-300 group"
             >
-              <span className="text-[10px] font-mono text-white/25 uppercase tracking-widest flex items-center gap-2">
-                <ArrowLeft size={11} className="group-hover:-translate-x-1 transition-transform" /> Previous Service
+              <span className="text-[10px] font-mono text-white/30 tracking-widest flex items-center gap-2 group-hover:text-green-400 transition-colors">
+                <ArrowLeft size={11} className="group-hover:-translate-x-1 transition-transform" /> Previous
               </span>
-              <span className="text-base md:text-xl font-black uppercase tracking-tight text-white/60 group-hover:text-green-400 transition-colors">
+              <span className="font-heading text-base md:text-xl font-bold tracking-tight text-white/70 group-hover:text-green-400 transition-colors">
                 {prevService.title}
               </span>
             </Link>
             <Link
               to={`/services/${nextService.slug}`}
-              className="py-12 md:py-16 pl-8 flex flex-col gap-3 items-end text-right hover:bg-white/[0.02] transition-colors group"
+              className="py-10 md:py-12 pl-8 flex flex-col gap-3 items-end text-right hover:bg-white/[0.03] transition-colors duration-300 group"
             >
-              <span className="text-[10px] font-mono text-white/25 uppercase tracking-widest flex items-center gap-2">
-                Next Service <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
+              <span className="text-[10px] font-mono text-white/30 tracking-widest flex items-center gap-2 group-hover:text-green-400 transition-colors">
+                Next <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
               </span>
-              <span className="text-base md:text-xl font-black uppercase tracking-tight text-white/60 group-hover:text-green-400 transition-colors">
+              <span className="font-heading text-base md:text-xl font-bold tracking-tight text-white/70 group-hover:text-green-400 transition-colors">
                 {nextService.title}
               </span>
             </Link>
           </div>
         </div>
       </div>
+
+      <Footer />
+      <WhatsAppButton />
+      <ChatbotWidget />
     </div>
   );
 };
