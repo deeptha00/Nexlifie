@@ -10,6 +10,7 @@ import ServiceDetailPage from './pages/ServiceDetailPage';
 import CapabilityPage from './pages/CapabilityPage';
 import CeoProfilePage from './pages/CeoProfilePage';
 import CtoProfilePage from './pages/CtoProfilePage';
+import NotFoundPage from './pages/NotFoundPage';
 import { capabilitySlugs } from './data/capabilities';
 
 const AppRoutes = () => (
@@ -32,6 +33,7 @@ const AppRoutes = () => (
       <Route key={slug} path={`/services/${slug}`} element={<CapabilityPage slug={slug} />} />
     ))}
     <Route path="/services/:slug" element={<ServiceDetailPage />} />
+    <Route path="*" element={<NotFoundPage />} />
   </Routes>
 );
 

@@ -26,6 +26,20 @@ const setCanonical = (href) => {
   el.setAttribute('href', href);
 };
 
+const setRobots = (noindex) => {
+  let el = document.querySelector('meta[name="robots"]');
+  if (!noindex) {
+    if (el) el.remove();
+    return;
+  }
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute('name', 'robots');
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', 'noindex, nofollow');
+};
+
 const setJsonLd = (structuredData) => {
   document.querySelectorAll('script[data-page-jsonld]').forEach((el) => el.remove());
   (structuredData || []).forEach((item) => {
@@ -43,7 +57,7 @@ const setJsonLd = (structuredData) => {
  * SSR pass writes the same data into HeadContext so scripts/prerender.mjs
  * can bake it into the static HTML for each route.
  */
-const PageHead = ({ title, description, canonical, ogImage, ogType = 'website', structuredData }) => {
+const PageHead = ({ title, description, canonical, ogImage, ogType = 'website', structuredData, noindex = false }) => {
   const headCtx = useHeadContext();
   const resolvedCanonical = canonical ? `${SITE_URL}${canonical}` : undefined;
   const resolvedOgImage = !ogImage
@@ -59,6 +73,7 @@ const PageHead = ({ title, description, canonical, ogImage, ogType = 'website', 
     headCtx.ogImage = resolvedOgImage;
     headCtx.ogType = ogType;
     headCtx.structuredData = structuredData || [];
+    headCtx.noindex = noindex;
   }
 
   useEffect(() => {
@@ -76,7 +91,8 @@ const PageHead = ({ title, description, canonical, ogImage, ogType = 'website', 
     setMetaTag('name', 'twitter:image', resolvedOgImage);
     setCanonical(resolvedCanonical);
     setJsonLd(structuredData);
-  }, [title, description, resolvedCanonical, resolvedOgImage, ogType, structuredData]);
+    setRobots(noindex);
+  }, [title, description, resolvedCanonical, resolvedOgImage, ogType, structuredData, noindex]);
 
   return null;
 };
