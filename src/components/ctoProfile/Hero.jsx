@@ -88,9 +88,6 @@ export default function Hero() {
                 <p className="font-semibold text-lg leading-tight">{profile.name}</p>
                 <p className="text-sm text-[rgb(var(--cto-fg-rgb)/70%)]">{profile.title}, {profile.company}</p>
               </div>
-              <span className="hidden sm:flex items-center gap-2 font-cto-mono text-[11px] text-[rgb(var(--cto-accent-rgb))]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--cto-accent-rgb))] animate-pulse" />Building
-              </span>
             </div>
           </div>
           {['-top-2 -left-2 border-t border-l', '-top-2 -right-2 border-t border-r', '-bottom-2 -left-2 border-b border-l', '-bottom-2 -right-2 border-b border-r'].map((c) => (
