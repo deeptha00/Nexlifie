@@ -4,6 +4,13 @@ import { MapPin } from 'lucide-react';
 import { aboutPillars, profile } from '../../data/ceoProfileContent';
 import { usePrefersReducedMotion } from './useMediaQuery';
 import DecryptedText from './DecryptedText';
+import LinkedInIcon from './icons/LinkedInIcon';
+import InstagramIcon from './icons/InstagramIcon';
+
+const socialLinks = [
+  { href: profile.linkedin, label: 'LinkedIn', Icon: LinkedInIcon },
+  { href: profile.instagram, label: 'Instagram', Icon: InstagramIcon },
+];
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -120,6 +127,30 @@ export default function Hero() {
                       'linear-gradient(to bottom, transparent 84%, black 91%, black 94%, transparent 100%)',
                   }}
                 />
+
+                {/* Social links, floating off the photo's right edge —
+                    pointer-events restored here since the ancestor wrappers
+                    are pointer-events-none to let clicks pass through to
+                    the name text behind them. */}
+                <motion.div
+                  initial={prefersReducedMotion ? false : { opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 1, ease: EASE }}
+                  className="pointer-events-auto absolute right-0 top-1/2 z-30 flex -translate-y-1/2 translate-x-1/2 flex-col gap-3"
+                >
+                  {socialLinks.map(({ href, label, Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={label}
+                      className="ceo-card flex h-9 w-9 items-center justify-center rounded-full text-[rgb(var(--ceo-ink-rgb))] transition-colors hover:border-[rgb(var(--ceo-accent-rgb))] hover:text-[rgb(var(--ceo-accent-rgb))]"
+                    >
+                      <Icon size={15} />
+                    </a>
+                  ))}
+                </motion.div>
               </motion.div>
             </motion.div>
           </div>

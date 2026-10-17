@@ -22,7 +22,7 @@ export const business = {
   name: 'Nexlifie',
   legalName: 'Nexlifie',
   email: 'info@nexlifie.com',
-  phone: '+91 95915 22856',
+  phone: '+91 7025468762',
   phoneE164: '+919591522856',
 
   /* Where we are — this is what makes us findable locally. */
