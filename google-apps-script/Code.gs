@@ -45,7 +45,7 @@ const SHEET_HEADERS = [
  * add, remove, or re-limit a role in careers.js, update this map too.
  */
 const JOB_LIMITS = {
-  'social-media-manager': 50,
+  'smm': 50,
   'hr-trainee': 50,
   'business-development-executive': 50,
   '3d-artist-designer': 50,

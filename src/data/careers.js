@@ -16,7 +16,7 @@
 
 export const jobOpenings = [
   {
-    id: 'social-media-manager',
+    id: 'smm',
     title: 'Social Media Manager',
     department: 'Nexlifie Media',
     shortDescription: 'Own the social presence for Nexlifie and our client brands — strategy, content, and growth.',
