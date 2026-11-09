@@ -48,12 +48,12 @@ export const jobOpenings = [
     postedDate: '2026-11-09',
   },
   {
-    id: 'hr-intern',
-    title: 'HR Intern',
+    id: 'hr-trainee',
+    title: 'HR Trainee',
     department: 'People & Operations',
     shortDescription: 'Support hiring, onboarding, and day-to-day people operations as we grow the team.',
     description:
-      'We\'re hiring an HR Intern to help run the people side of a small, fast-growing team. You\'ll be close to hiring decisions, onboarding, and the systems that keep a team running smoothly — real responsibility, not just coffee runs and spreadsheets nobody reads.',
+      'We\'re hiring an HR Trainee to help run the people side of a small, fast-growing team. You\'ll be close to hiring decisions, onboarding, and the systems that keep a team running smoothly — real responsibility, not just coffee runs and spreadsheets nobody reads.',
     experience: '0–1 Year (Freshers Welcome!)',
     workMode: 'On-site',
     employmentType: 'Full-time',
