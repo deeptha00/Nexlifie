@@ -80,7 +80,7 @@ export const jobOpenings = [
     postedDate: '2026-11-09',
   },
   {
-    id: 'business-development-executive',
+    id: 'bde',
     title: 'Business Development Executive',
     department: 'Sales & Growth',
     shortDescription: 'Drive new business for Nexlifie through outreach, pitching, and closing deals.',

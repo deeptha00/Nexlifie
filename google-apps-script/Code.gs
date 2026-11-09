@@ -47,7 +47,7 @@ const SHEET_HEADERS = [
 const JOB_LIMITS = {
   'smm': 50,
   'hr-trainee': 50,
-  'business-development-executive': 50,
+  'bde': 50,
   '3d-artist-designer': 50,
 };
 
