@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Local env vars (e.g. VITE_CAREERS_SCRIPT_URL) — see .env.example
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

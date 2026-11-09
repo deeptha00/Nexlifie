@@ -21,6 +21,7 @@ const navLinks = [
   { name: 'Media', to: '/media' },
   { name: 'About', to: '/about' },
   { name: 'Clients / Work', to: '/clients' },
+  { name: 'Careers', to: '/careers' },
   { name: 'Contact', to: '/contact' },
 ];
 

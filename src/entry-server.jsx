@@ -4,8 +4,10 @@ import { ThemeProvider } from './context/ThemeContext';
 import { HeadContext } from './context/HeadContext';
 import AppRoutes from './AppRoutes';
 import servicesData from './data/servicesData';
+import { jobSlugs } from './data/careers';
 
 export const serviceSlugs = servicesData.map((s) => s.slug);
+export { jobSlugs };
 
 export function render(url) {
   const head = {

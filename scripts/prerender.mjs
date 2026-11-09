@@ -10,12 +10,16 @@ import { fileURLToPath } from 'node:url';
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = resolve(rootDir, 'dist');
 
-const { render, serviceSlugs } = await import(
+const { render, serviceSlugs, jobSlugs } = await import(
   resolve(rootDir, 'dist-ssr/entry-server.js')
 );
 
-const staticRoutes = ['/', '/development', '/media', '/about', '/testimonials', '/clients', '/contact', '/ceo-profile', '/cto-profile'];
-const routes = [...staticRoutes, ...serviceSlugs.map((slug) => `/services/${slug}`)];
+const staticRoutes = ['/', '/development', '/media', '/about', '/testimonials', '/clients', '/contact', '/ceo-profile', '/cto-profile', '/careers'];
+const routes = [
+  ...staticRoutes,
+  ...serviceSlugs.map((slug) => `/services/${slug}`),
+  ...jobSlugs.map((slug) => `/careers/${slug}`),
+];
 
 const rawTemplate = readFileSync(resolve(distDir, 'index.html'), 'utf-8');
 // Strip the dev-only canonical/OG/Twitter fallback block; real per-route tags are injected below.

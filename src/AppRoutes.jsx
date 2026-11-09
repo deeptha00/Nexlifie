@@ -10,6 +10,8 @@ import ServiceDetailPage from './pages/ServiceDetailPage';
 import CapabilityPage from './pages/CapabilityPage';
 import CeoProfilePage from './pages/CeoProfilePage';
 import CtoProfilePage from './pages/CtoProfilePage';
+import CareersPage from './pages/CareersPage';
+import CareerDetailPage from './pages/CareerDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { capabilitySlugs } from './data/capabilities';
 
@@ -25,6 +27,8 @@ const AppRoutes = () => (
     <Route path="/contact" element={<ContactPage />} />
     <Route path="/ceo-profile" element={<CeoProfilePage />} />
     <Route path="/cto-profile" element={<CtoProfilePage />} />
+    <Route path="/careers" element={<CareersPage />} />
+    <Route path="/careers/:jobId" element={<CareerDetailPage />} />
 
     {/* The six core capabilities get their own pages. Declared before the
         generic :slug route so they win; the remaining services still fall
