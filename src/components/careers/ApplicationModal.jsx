@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, CheckCircle2, AlertCircle, UploadCloud, FileText, Loader2 } from 'lucide-react';
 import { submitApplication, isValidResumeFile, RESUME_MAX_BYTES, RESUME_ACCEPT } from '../../lib/careersApi';
+import { trackPixel } from '../../lib/pixel';
 
 const employmentStatusOptions = ['Employed', 'Unemployed', 'Student', 'Freelancer'];
 
@@ -93,6 +94,7 @@ const ApplicationModal = ({ job, onClose }) => {
     setErrorMessage('');
     try {
       await submitApplication({ job, fields, resumeFile });
+      trackPixel('Lead', { content_name: `Job Application — ${job?.title}` });
       setStatus('SUCCESS');
     } catch (err) {
       setStatus('ERROR');

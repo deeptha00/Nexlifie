@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import PageLayout from '../components/PageLayout';
 import { breadcrumbList, faqPage, localBusiness, serviceSchema } from '../lib/seo';
 import capabilities, { capabilityBySlug } from '../data/capabilities';
+import { trackPixel } from '../lib/pixel';
 import {
   CapabilityHero,
   CapabilityProblem,
@@ -57,6 +59,15 @@ const scenarioVisual = {
  */
 const CapabilityPage = ({ slug }) => {
   const capability = capabilityBySlug[slug];
+
+  useEffect(() => {
+    trackPixel('ViewContent', {
+      content_name: capability.name,
+      content_category: 'Services',
+      content_ids: [capability.slug],
+      content_type: 'product',
+    });
+  }, [capability]);
 
   return (
     <PageLayout

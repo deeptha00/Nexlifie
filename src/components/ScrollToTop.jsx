@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { trackPixel } from '../lib/pixel';
 
 /**
  * React Router does not reset scroll position on navigation — a client-side
@@ -14,8 +15,17 @@ import { useLocation } from 'react-router-dom';
  */
 const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
+    // The Meta Pixel base snippet in index.html already fires the initial
+    // PageView on hard load — only track subsequent client-side navigations.
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      trackPixel('PageView');
+    }
+
     if (hash) {
       const target = document.getElementById(hash.slice(1));
       if (target) {

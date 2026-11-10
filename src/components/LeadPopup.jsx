@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, User, Phone, Mail, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { trackPixel } from '../lib/pixel';
 
 const STORAGE_KEY = 'nexlifie_lead_popup_shown';
 
@@ -46,6 +47,7 @@ const LeadPopup = () => {
     } catch {
       // ignore network errors, still show success to the user
     }
+    trackPixel('Lead', { content_name: 'Lead Popup' });
     setStatus('SUCCESS');
   };
 

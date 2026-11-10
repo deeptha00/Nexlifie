@@ -10,6 +10,7 @@ import ChatbotWidget from '../components/chatbot/ChatbotWidget';
 import PageHead from '../components/PageHead';
 import { staggerParent, staggerItem } from '../lib/motion';
 import { breadcrumbList } from '../lib/seo';
+import { trackPixel } from '../lib/pixel';
 
 /* ─── Animated Counter ─────────────────────────────── */
 const AnimCounter = ({ value }) => {
@@ -202,6 +203,16 @@ const ServiceDetailPage = () => {
   const nextService = servicesData[(currentIndex + 1) % servicesData.length];
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+
+  useEffect(() => {
+    if (!service) return;
+    trackPixel('ViewContent', {
+      content_name: service.title,
+      content_category: 'Services',
+      content_ids: [service.slug],
+      content_type: 'product',
+    });
+  }, [service]);
 
   if (!service) return (
     <div className="min-h-screen bg-[var(--bg-dark)] flex items-center justify-center">

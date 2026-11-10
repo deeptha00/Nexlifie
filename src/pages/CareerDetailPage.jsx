@@ -8,12 +8,23 @@ import { fadeUp } from '../lib/motion';
 import { getJobById } from '../data/careers';
 import { fetchJobStatus } from '../lib/careersApi';
 import ApplicationModal from '../components/careers/ApplicationModal';
+import { trackPixel } from '../lib/pixel';
 
 const CareerDetailPage = () => {
   const { jobId } = useParams();
   const job = getJobById(jobId);
   const [liveStatus, setLiveStatus] = useState({ counts: {}, closed: [] });
   const [applying, setApplying] = useState(false);
+
+  useEffect(() => {
+    if (!job) return;
+    trackPixel('ViewContent', {
+      content_name: job.title,
+      content_category: 'Careers',
+      content_ids: [job.id],
+      content_type: 'product',
+    });
+  }, [job]);
 
   useEffect(() => {
     if (!job) return;

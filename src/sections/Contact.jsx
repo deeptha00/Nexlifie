@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, ArrowRight, User, CheckCircle2 } from 'lucide-react';
 import { fadeUp } from '../lib/motion';
 import { business } from '../lib/siteConfig';
+import { trackPixel } from '../lib/pixel';
 
 const Contact = ({ headingLevel = 'h2' }) => {
   const Heading = headingLevel;
@@ -41,6 +42,7 @@ const Contact = ({ headingLevel = 'h2' }) => {
     } catch {
       // ignore network errors, still show success to the user
     }
+    trackPixel('Lead', { content_name: 'Contact Form' });
     setFormStatus('SUCCESS');
   };
 
